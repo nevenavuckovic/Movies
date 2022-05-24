@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="hint">Text</string>
+    <string name="title">Title: %s</string>
+    <string name="director">Director: %s</string>
+    <string name="actors">Actors: %s</string>
+    <string name="year">Year: %s</string>
+    <string name="genres">Genres: %s</string>
+    <string name="description">Description: %s</string>
+</resources>

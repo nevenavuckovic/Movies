@@ -1,0 +1,59 @@
+package rs.ac.ni.pmf.movies.fragment;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import rs.ac.ni.pmf.movies.databinding.FragmentMovieBinding;
+import rs.ac.ni.pmf.movies.model.Movie;
+import rs.ac.ni.pmf.movies.model.MoviesViewModel;
+
+import java.util.List;
+
+public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
+
+    private final List<Movie> movies;
+    private final MovieSelectedListener movieSelectedListener;
+
+    public interface MovieSelectedListener{
+        void onMovieSelected(Movie movie);
+    }
+
+    public MoviesRecyclerViewAdapter(List<Movie> movies, MovieSelectedListener movieSelectedListener) {
+        this.movies = movies;
+        this.movieSelectedListener = movieSelectedListener;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        return new ViewHolder(FragmentMovieBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Movie movie = movies.get(position);
+        holder.binding.setMovie(movie);
+        holder.itemView.setOnClickListener(view -> movieSelectedListener.onMovieSelected(movie));
+    }
+
+    @Override
+    public int getItemCount() {
+        return movies.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public FragmentMovieBinding binding;
+
+        public ViewHolder(FragmentMovieBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+    }
+}
