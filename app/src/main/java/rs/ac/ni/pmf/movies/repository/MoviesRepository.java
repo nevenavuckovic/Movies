@@ -20,15 +20,15 @@ public class MoviesRepository {
         genres.add("Action");
         genres.add("Adventure");
         genres.add("Sci-Fi");
-        movies.add(new Movie(1, "Iron man", "Jon Favreau", actors, 2008, genres,
+        movies.add(new Movie(1, "Iron man", "iron_man.png", "Jon Favreau", actors, 2008, genres,
                 "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(2, "The Avengers", "Jon Favreau", actors, 2008, genres,
+        movies.add(new Movie(2, "The Avengers", "iron_man.png", "Jon Favreau", actors, 2008, genres,
                 "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(3, "Gifted", "Jon Favreau", actors, 2008, genres,
+        movies.add(new Movie(3, "Gifted", "iron_man.png", "Jon Favreau", actors, 2008, genres,
                 "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(4, "The Lord of the Rings: The Return of the King", "Jon Favreau", actors, 2008, genres,
+        movies.add(new Movie(4, "The Lord of the Rings: The Return of the King", "iron_man.png", "Jon Favreau", actors, 2008, genres,
                 "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(5, "Coco", "Jon Favreau", actors, 2008, genres,
+        movies.add(new Movie(5, "Coco", "iron_man.png", "Jon Favreau", actors, 2008, genres,
                 "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
 
     }

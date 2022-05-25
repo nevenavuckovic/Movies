@@ -7,4 +7,5 @@
     <string name="year">Year: %s</string>
     <string name="genres">Genres: %s</string>
     <string name="description">Description: %s</string>
+    <string name="select_movie">Please select a movie</string>
 </resources>

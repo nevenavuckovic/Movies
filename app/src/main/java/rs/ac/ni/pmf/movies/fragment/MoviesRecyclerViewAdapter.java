@@ -1,21 +1,19 @@
 package rs.ac.ni.pmf.movies.fragment;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import rs.ac.ni.pmf.movies.databinding.FragmentMovieBinding;
 import rs.ac.ni.pmf.movies.model.Movie;
-import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
 import java.util.List;
 
 public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
 
+    private static int selectedPosition = RecyclerView.NO_POSITION;
     private final List<Movie> movies;
     private final MovieSelectedListener movieSelectedListener;
 
@@ -37,9 +35,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Movie movie = movies.get(position);
-        holder.binding.setMovie(movie);
-        holder.itemView.setOnClickListener(view -> movieSelectedListener.onMovieSelected(movie));
+        holder.setSelection(position);
     }
 
     @Override
@@ -47,13 +43,28 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         return movies.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public FragmentMovieBinding binding;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private Movie movie;
+        private FragmentMovieBinding binding;
 
         public ViewHolder(FragmentMovieBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.itemView.setOnClickListener(this);
         }
 
+        public void setSelection(int position) {
+            this.movie = movies.get(position);
+            this.binding.setMovie(this.movie);
+            this.itemView.setSelected(position == selectedPosition);
+        }
+
+        @Override
+        public void onClick(View view) {
+            notifyItemChanged(selectedPosition);
+            selectedPosition = getBindingAdapterPosition();
+            notifyItemChanged(selectedPosition);
+            movieSelectedListener.onMovieSelected(movie);
+        }
     }
 }

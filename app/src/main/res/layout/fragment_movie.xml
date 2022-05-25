@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="movie"
@@ -11,8 +12,7 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/lavender"
-        >
+        android:background="@drawable/background_selector">
 
         <TextView
             android:id="@+id/item_number"
@@ -21,7 +21,7 @@
             android:text="@{movie.name}"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="20sp"
-            android:hint="@string/hint"
+            tools:text="@string/hint"
             />
 
     </LinearLayout>
