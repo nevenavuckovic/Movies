@@ -1,39 +1,44 @@
 package rs.ac.ni.pmf.movies.repository;
 
-import java.util.ArrayList;
+import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
+import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.Movie;
+import rs.ac.ni.pmf.movies.model.MovieGenreCrossRef;
 
 public class MoviesRepository {
 
-    public static MoviesRepository INSTANCE = new MoviesRepository();
+    private final MoviesDao moviesDao;
+    private final ActorsDao actorsDao;
+    private final GenresDao genresDao;
+    private final MoviesGenresDao moviesGenresDao;
 
-    private List<Movie> movies = new ArrayList<>();
-
-    public MoviesRepository(){
-        List<String> actors = new ArrayList<>();
-        actors.add("Robert Downey Jr");
-        actors.add("Gwyneth Paltrow");
-        actors.add("Terrence Howard");
-        List<String> genres = new ArrayList<>();
-        genres.add("Action");
-        genres.add("Adventure");
-        genres.add("Sci-Fi");
-        movies.add(new Movie(1, "Iron man", "iron_man.png", "Jon Favreau", actors, 2008, genres,
-                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(2, "The Avengers", "iron_man.png", "Jon Favreau", actors, 2008, genres,
-                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(3, "Gifted", "iron_man.png", "Jon Favreau", actors, 2008, genres,
-                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(4, "The Lord of the Rings: The Return of the King", "iron_man.png", "Jon Favreau", actors, 2008, genres,
-                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
-        movies.add(new Movie(5, "Coco", "iron_man.png", "Jon Favreau", actors, 2008, genres,
-                "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil"));
+    public MoviesRepository(Context context){
+        final MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(context);
+        this.moviesDao = moviesDatabase.moviesDao();
+        this.actorsDao = moviesDatabase.actorsDao();
+        this.genresDao = moviesDatabase.genresDao();
+        this.moviesGenresDao = moviesDatabase.moviesGenresDao();
 
     }
 
-    public List<Movie> getMovies(){
-        return movies;
+    public LiveData<List<Movie>> getMovies(){
+        return moviesDao.getAllMovies();
     }
+
+    public void addMovie(Movie movie){
+        MoviesDatabase.databaseExecutor.execute(()->moviesDao.insertMovie(movie));
+    }
+
+    public void addGenre(Genre genre){
+        MoviesDatabase.databaseExecutor.execute(()->genresDao.insertGenre(genre));
+    }
+    public void addMovieGenre(MovieGenreCrossRef movieGenreCrossRef){
+        MoviesDatabase.databaseExecutor.execute(()->moviesGenresDao.insertMovieGenreCrossRef(movieGenreCrossRef));
+    }
+
 }

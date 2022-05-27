@@ -2,38 +2,45 @@ package rs.ac.ni.pmf.movies.model;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.List;
-
+@Entity(tableName = "movies")
 public class Movie extends BaseObservable {
-    private final long id;
-    private String name;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "movie_id")
+    private long movie_id;
+    @ColumnInfo(name = "title")
+    private String title;
+    @ColumnInfo(name = "image")
     private String image;
+    @ColumnInfo(name = "director")
     private String director;
-    private List<String> actors;
+    @ColumnInfo(name = "year")
     private long year;
-    private List<String> genres;
+    @ColumnInfo(name = "description")
     private String description;
 
-    public Movie(long id, String name, String image, String director, List<String> actors,
-                 long year, List<String> genres, String description) {
-        this.id = id;
-        this.name = name;
+    public Movie(long movie_id, String title, String image, String director,
+                 long year, String description) {
+        this.movie_id = movie_id;
+        this.title = title;
         this.image = image;
         this.director = director;
-        this.actors = actors;
         this.year = year;
-        this.genres = genres;
         this.description = description;
     }
 
-    public long getId() {
-        return id;
+    @Bindable
+    public long getMovie_id() {
+        return movie_id;
     }
 
     @Bindable
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     @Bindable
@@ -47,18 +54,8 @@ public class Movie extends BaseObservable {
     }
 
     @Bindable
-    public List<String> getActors() {
-        return actors;
-    }
-
-    @Bindable
     public long getYear() {
         return year;
-    }
-
-    @Bindable
-    public List<String> getGenres() {
-        return genres;
     }
 
     @Bindable
@@ -66,8 +63,12 @@ public class Movie extends BaseObservable {
         return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovie_id(long movie_id) {
+        this.movie_id = movie_id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setImage(String image) {
@@ -78,16 +79,8 @@ public class Movie extends BaseObservable {
         this.director = director;
     }
 
-    public void setActors(List<String> actors) {
-        this.actors = actors;
-    }
-
     public void setYear(long year) {
         this.year = year;
-    }
-
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
     }
 
     public void setDescription(String description) {

@@ -2,6 +2,7 @@ package rs.ac.ni.pmf.movies.fragment;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +25,12 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public MoviesRecyclerViewAdapter(List<Movie> movies, MovieSelectedListener movieSelectedListener) {
         this.movies = movies;
         this.movieSelectedListener = movieSelectedListener;
+
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         return new ViewHolder(FragmentMovieBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
     }
 
     @Override
@@ -51,6 +51,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
             super(binding.getRoot());
             this.binding = binding;
             this.itemView.setOnClickListener(this);
+
         }
 
         public void setSelection(int position) {
