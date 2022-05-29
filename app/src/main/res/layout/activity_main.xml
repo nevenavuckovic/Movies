@@ -10,6 +10,7 @@
         android:id="@+id/vertical_fragment_container"
         android:name="rs.ac.ni.pmf.movies.fragment.MoviesListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_movies_list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

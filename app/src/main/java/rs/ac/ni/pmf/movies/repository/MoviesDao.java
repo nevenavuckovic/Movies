@@ -29,16 +29,23 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies")
     LiveData<List<Movie>> getAllMovies();
 
-    @Transaction
-    @Query("SELECT g.genre FROM genres g INNER JOIN movies_genres mg ON g.genre_id = mg.genre_id  " +
-            "INNER JOIN movies m ON mg.movie_id = m.movie_id " +
-            "WHERE m.title LIKE :title")
-    LiveData<List<String>> getGenresByMovie(String title);
+    @Query("SELECT movies.director FROM movies WHERE movies.title like :title")
+    String getDirector(String title);
 
 
     @Transaction
-    @Query("SELECT * FROM movies WHERE title LIKE :title ")
-    LiveData<List<MovieWithActors>> getActorsByMovie(String title);
+    @Query("SELECT * FROM movies " +
+            "WHERE movies.title like :title")
+    LiveData<MovieWithActors> getActorsByMovie(String title);
+
+
+    @Transaction
+    @Query("SELECT * FROM movies")
+    LiveData<List<MovieWithGenres>> getMoviesWithGenres();
+
+    @Transaction
+    @Query("SELECT * FROM movies")
+    LiveData<List<MovieWithActors>> getMoviesWithActors();
 
     @Query("SELECT * FROM movies WHERE year = :year")
     LiveData<List<Movie>> getMoviesYear(long year);

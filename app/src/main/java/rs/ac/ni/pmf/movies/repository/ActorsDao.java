@@ -1,5 +1,6 @@
 package rs.ac.ni.pmf.movies.repository;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import rs.ac.ni.pmf.movies.model.Actor;
 import rs.ac.ni.pmf.movies.model.ActorWithMovies;
+import rs.ac.ni.pmf.movies.model.MovieWithActors;
 
 
 @Dao
@@ -21,6 +23,10 @@ public interface ActorsDao {
 
     @Query("SELECT * FROM actors")
     List<Actor> getAllActors();
+
+    @Transaction
+    @Query("SELECT * FROM movies")
+    LiveData<List<MovieWithActors>> getMovieActor();
 
     @Transaction
     @Query("SELECT * FROM actors WHERE actor LIKE :actor ")

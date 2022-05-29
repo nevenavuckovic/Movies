@@ -27,7 +27,7 @@ public abstract class MoviesDatabase extends RoomDatabase {
             synchronized (MoviesDatabase.class){
                 if(INSTANCE == null){
                     INSTANCE = Room
-                            .databaseBuilder(context, MoviesDatabase.class, "movies_database")
+                            .databaseBuilder(context.getApplicationContext(), MoviesDatabase.class, "movies_database")
                             .setQueryExecutor(databaseExecutor)
                             .build();
                 }
@@ -40,5 +40,5 @@ public abstract class MoviesDatabase extends RoomDatabase {
     public abstract ActorsDao actorsDao();
     public abstract GenresDao genresDao();
     public abstract MoviesGenresDao moviesGenresDao();
-
+    public abstract MoviesActorsDao moviesActorsDao();
 }
