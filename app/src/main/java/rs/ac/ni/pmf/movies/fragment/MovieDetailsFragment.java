@@ -24,6 +24,8 @@ public class MovieDetailsFragment extends Fragment {
 
     private MoviesViewModel moviesViewModel;
     private FragmentMovieDetailsBinding binding;
+    private Context context;
+
 
     public static MovieDetailsFragment newInstance() {
         return new MovieDetailsFragment();
@@ -33,6 +35,7 @@ public class MovieDetailsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         moviesViewModel = new ViewModelProvider(requireActivity()).get(MoviesViewModel.class);
+        this.context = context;
     }
 
     @Override
@@ -45,9 +48,15 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        moviesViewModel.getSelectedMovieWithGenres().observe(requireActivity(),
-                movie -> binding.setMovieWithGenres(movie));
-        moviesViewModel.getSelectedMovieWithActors().observe(requireActivity(),
-                movie -> binding.setMovieWithActors(movie));
+        moviesViewModel.getSelectedMovieWithGenres().observe(requireActivity(), movieWithGenres -> {
+            binding.setMovieWithGenres(movieWithGenres);
+            if (movieWithGenres != null) {
+                binding.movieImage.setImageResource(context.getResources().getIdentifier(movieWithGenres.movie.getImage(),
+                        "drawable", context.getPackageName()));
+                moviesViewModel.getSelectedMovieWithActors().observe(requireActivity(), movie -> binding.setMovieWithActors(movie));
+            }
+
+        });
+
     }
 }

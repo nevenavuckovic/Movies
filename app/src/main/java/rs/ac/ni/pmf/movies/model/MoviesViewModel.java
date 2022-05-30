@@ -28,7 +28,7 @@ public class MoviesViewModel extends AndroidViewModel {
         super(application);
         moviesRepository = new MoviesRepository(application);
         moviesRepository.addMovie(
-                new Movie(1, "Iron Man", "ironman", "nekko",
+                new Movie(1, "Iron Man", "iron_man", "nekko",
                         2008, "nessto"));
         moviesRepository.addGenre(new Genre(1, "Action"));
         moviesRepository.addGenre(new Genre(2, "Adventure"));
@@ -51,11 +51,15 @@ public class MoviesViewModel extends AndroidViewModel {
     }
 
     public LiveData<MovieWithActors> getSelectedMovieWithActors() {
-        selectedMovieWithActors = moviesRepository.getMoviesWithActors(selectedMovieWithGenres.getValue().movie.getTitle());
+        if (selectedMovieWithGenres.getValue() != null) {
+            selectedMovieWithActors = moviesRepository.getMoviesWithActors(selectedMovieWithGenres.getValue().movie.getTitle());
+        }
+        MovieWithActors movieWithActors = selectedMovieWithActors.getValue();
         return selectedMovieWithActors;
     }
 
-    public void setSelectedMovie(MovieWithGenres movie) {
-        selectedMovieWithGenres.setValue(movie);
+    public void setSelectedMovie(MovieWithGenres movieWithGenres) {
+        selectedMovieWithGenres.setValue(movieWithGenres);
     }
+
 }
