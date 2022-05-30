@@ -54,7 +54,6 @@ public class MoviesViewModel extends AndroidViewModel {
         if (selectedMovieWithGenres.getValue() != null) {
             selectedMovieWithActors = moviesRepository.getMoviesWithActors(selectedMovieWithGenres.getValue().movie.getTitle());
         }
-        MovieWithActors movieWithActors = selectedMovieWithActors.getValue();
         return selectedMovieWithActors;
     }
 

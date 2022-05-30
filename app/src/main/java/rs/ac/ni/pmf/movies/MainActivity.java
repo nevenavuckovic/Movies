@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
 
     @Override
     public void onMovieSelected(MovieWithGenres movie) {
-        this.movie = movie;
+        MainActivity.movie = movie;
         moviesViewModel.setSelectedMovie(movie);
         if(findViewById(R.id.vertical_fragment_container) != null){
             getSupportFragmentManager().beginTransaction()
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     @Override
     protected void onResume() {
         super.onResume();
-        moviesViewModel.setSelectedMovie(this.movie);
+        moviesViewModel.setSelectedMovie(movie);
 
     }
 }
