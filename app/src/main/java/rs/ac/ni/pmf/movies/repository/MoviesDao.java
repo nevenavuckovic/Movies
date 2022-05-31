@@ -26,6 +26,9 @@ public interface MoviesDao {
     @Delete
     void deleteMovie(Movie movie);
 
+    @Query("DELETE FROM movies WHERE movie_id = :id")
+    void deleteMovieById(long id);
+
     @Query("SELECT * FROM movies")
     LiveData<List<Movie>> getAllMovies();
 
@@ -52,5 +55,6 @@ public interface MoviesDao {
 
     @Query("SELECT * FROM movies WHERE title LIKE :text ")
     LiveData<List<Movie>> getMoviesSearch(String text);
+
 
 }

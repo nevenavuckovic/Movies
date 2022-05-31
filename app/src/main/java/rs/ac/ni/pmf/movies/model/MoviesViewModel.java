@@ -30,15 +30,24 @@ public class MoviesViewModel extends AndroidViewModel {
         moviesRepository.addMovie(
                 new Movie(1, "Iron Man", "iron_man", "nekko",
                         2008, "nessto"));
+        moviesRepository.addMovie(
+                new Movie(2, "The Avengers", "the_avengers", "niko",
+                        2012, "nista"));
         moviesRepository.addGenre(new Genre(1, "Action"));
         moviesRepository.addGenre(new Genre(2, "Adventure"));
+        moviesRepository.addGenre(new Genre(3, "Sci-fi"));
+
         moviesRepository.addMovieGenre(new MovieGenreCrossRef(1,1));
         moviesRepository.addMovieGenre(new MovieGenreCrossRef(1,2));
+        moviesRepository.addMovieGenre(new MovieGenreCrossRef(2,1));
+        moviesRepository.addMovieGenre(new MovieGenreCrossRef(2,3));
 
         moviesRepository.addActor(new Actor(1, "Chris"));
         moviesRepository.addActor(new Actor(2, "Robert"));
         moviesRepository.addMovieActor(new MovieActorCrossRef(1,1));
         moviesRepository.addMovieActor(new MovieActorCrossRef(1,2));
+        moviesRepository.addMovieActor(new MovieActorCrossRef(2,2));
+
     }
 
 
@@ -61,4 +70,7 @@ public class MoviesViewModel extends AndroidViewModel {
         selectedMovieWithGenres.setValue(movieWithGenres);
     }
 
+    public void deleteMovie(long id) {
+        moviesRepository.deleteMovie(id);
+    }
 }

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     public void onMovieSelected(MovieWithGenres movie) {
         MainActivity.movie = movie;
         moviesViewModel.setSelectedMovie(movie);
-        if(findViewById(R.id.vertical_fragment_container) != null){
+        if(findViewById(R.id.vertical_fragment_container) != null && movie != null){
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.vertical_fragment_container, MovieDetailsFragment.class, null)

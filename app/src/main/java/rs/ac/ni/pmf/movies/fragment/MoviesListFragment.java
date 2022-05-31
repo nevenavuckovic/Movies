@@ -4,17 +4,23 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import rs.ac.ni.pmf.movies.R;
+import rs.ac.ni.pmf.movies.model.MovieWithActors;
+import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
 
@@ -22,6 +28,8 @@ public class MoviesListFragment extends Fragment {
 
     private MoviesViewModel moviesViewModel;
     private MoviesRecyclerViewAdapter.MovieSelectedListener movieSelectedListener;
+    private MoviesRecyclerViewAdapter moviesRecyclerViewAdapter;
+    public RecyclerView recyclerView;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -70,8 +78,13 @@ public class MoviesListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            this.recyclerView = recyclerView;
+            registerForContextMenu(recyclerView);
             moviesViewModel.getMovies().observe(requireActivity(),
-                    movies -> recyclerView.setAdapter(new MoviesRecyclerViewAdapter(movies, movieSelectedListener)));
+                    movies -> {
+                        moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(movies, movieSelectedListener, requireActivity());
+                        recyclerView.setAdapter(moviesRecyclerViewAdapter);
+                    });
         }
         return view;
     }
@@ -80,5 +93,29 @@ public class MoviesListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         movieSelectedListener = (MoviesRecyclerViewAdapter.MovieSelectedListener) context;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        MovieWithGenres movieWithGenres = moviesRecyclerViewAdapter.getMenuSelectedMovie();
+
+        if (item.getItemId() == R.id.menu_update_movie){
+            return true;
+        }
+        if (item.getItemId() == R.id.menu_delete_movie){
+            moviesViewModel.deleteMovie(movieWithGenres.movie.getMovie_id());
+            if (moviesRecyclerViewAdapter.menuAndSelected()) {
+                moviesRecyclerViewAdapter.resetSelectedPosition();
+                movieSelectedListener.onMovieSelected(null);
+            }
+            return true;
+        }
+        return false;
     }
 }

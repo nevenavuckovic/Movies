@@ -63,4 +63,8 @@ public class MoviesRepository {
         MoviesDatabase.databaseExecutor.execute(()->moviesActorsDao.insertMovieActorCrossRef(movieActorCrossRef));
 
     }
+
+    public void deleteMovie(long id) {
+        MoviesDatabase.databaseExecutor.execute(()->moviesDao.deleteMovieById(id));
+    }
 }
