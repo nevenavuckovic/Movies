@@ -54,8 +54,13 @@ public class MovieDetailsFragment extends Fragment {
         moviesViewModel.getSelectedMovieWithGenres().observe(fragmentActivity, movieWithGenres -> {
             binding.setMovieWithGenres(movieWithGenres);
             if (movieWithGenres != null) {
-                binding.movieImage.setImageResource(context.getResources().getIdentifier(movieWithGenres.movie.getImage(),
-                        "drawable", context.getPackageName()));
+                if (!movieWithGenres.movie.getImage().equals("")) {
+                    binding.movieImage.setImageResource(context.getResources().getIdentifier(movieWithGenres.movie.getImage(),
+                            "drawable", context.getPackageName()));
+                } else {
+                    binding.movieImage.setImageResource(context.getResources().getIdentifier("no_image",
+                            "drawable", context.getPackageName()));
+                }
                 moviesViewModel.getSelectedMovieWithActors().observe(fragmentActivity, movie -> binding.setMovieWithActors(movie));
             }
 

@@ -26,19 +26,15 @@ public interface MoviesDao {
     @Delete
     void deleteMovie(Movie movie);
 
+    @Transaction
     @Query("DELETE FROM movies WHERE movie_id = :id")
     void deleteMovieById(long id);
 
     @Query("SELECT * FROM movies")
     LiveData<List<Movie>> getAllMovies();
 
-    @Query("SELECT movies.director FROM movies WHERE movies.title like :title")
-    String getDirector(String title);
-
-
     @Transaction
-    @Query("SELECT * FROM movies " +
-            "WHERE movies.title like :title")
+    @Query("SELECT * FROM movies WHERE movies.title like :title")
     LiveData<MovieWithActors> getActorsByMovie(String title);
 
 
@@ -53,8 +49,9 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE year = :year")
     LiveData<List<Movie>> getMoviesYear(long year);
 
-    @Query("SELECT * FROM movies WHERE title LIKE :text ")
-    LiveData<List<Movie>> getMoviesSearch(String text);
+    @Transaction
+    @Query("SELECT * FROM movies WHERE title LIKE :text")
+    LiveData<List<MovieWithGenres>> getMoviesSearch(String text);
 
 
 }

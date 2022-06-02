@@ -18,7 +18,7 @@ import rs.ac.ni.pmf.movies.fragment.MoviesRecyclerViewAdapter;
 import rs.ac.ni.pmf.movies.repository.MoviesRepository;
 
 public class MoviesViewModel extends AndroidViewModel {
-    private MutableLiveData<List<MovieWithGenres>> movies = new MutableLiveData<>();
+    private LiveData<List<MovieWithGenres>> movies = new MutableLiveData<>();
     private MutableLiveData<MovieWithGenres> selectedMovieWithGenres = new MutableLiveData<>();
     private LiveData<MovieWithActors> selectedMovieWithActors = new MutableLiveData<>();
 
@@ -31,7 +31,7 @@ public class MoviesViewModel extends AndroidViewModel {
                 new Movie(1, "Iron Man", "iron_man", "nekko",
                         2008, "nessto"));
         moviesRepository.addMovie(
-                new Movie(2, "The Avengers", "the_avengers", "niko",
+                new Movie(2, "The Avengers", "", "niko",
                         2012, "nista"));
         moviesRepository.addGenre(new Genre(1, "Action"));
         moviesRepository.addGenre(new Genre(2, "Adventure"));
@@ -48,11 +48,22 @@ public class MoviesViewModel extends AndroidViewModel {
         moviesRepository.addMovieActor(new MovieActorCrossRef(1,2));
         moviesRepository.addMovieActor(new MovieActorCrossRef(2,2));
 
+        setMovies();
     }
 
 
     public LiveData<List<MovieWithGenres>> getMovies() {
-        return moviesRepository.getMoviesWithGenres();
+        return movies;
+    }
+
+    public void setMovies() {
+        movies = moviesRepository.getMoviesWithGenres();
+
+    }
+
+    public void setMovies(String text) {
+        List<MovieWithGenres> list =  moviesRepository.getMoviesWithSearch(text).getValue();
+        movies = moviesRepository.getMoviesWithSearch(text);
     }
 
     public MutableLiveData<MovieWithGenres> getSelectedMovieWithGenres() {
@@ -72,5 +83,9 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public void deleteMovie(long id) {
         moviesRepository.deleteMovie(id);
+    }
+
+    public LiveData<List<Genre>> getGenres() {
+        return moviesRepository.getGenres();
     }
 }

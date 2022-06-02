@@ -10,6 +10,8 @@
     <string name="select_movie">Please select a movie</string>
     <string name="delete_movie">Delete movie</string>
     <string name="add_movie">Add movie</string>
-    <string name="update_movie">Update movie</string>
+    <string name="edit_movie">Edit movie</string>
     <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_genres">Select genres</string>
 </resources>

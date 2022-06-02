@@ -1,28 +1,30 @@
 package rs.ac.ni.pmf.movies.fragment;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.databinding.FragmentMovieBinding;
-import rs.ac.ni.pmf.movies.model.Movie;
-import rs.ac.ni.pmf.movies.model.MovieWithActors;
+import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
+public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>
+        implements Filterable {
 
     private static int selectedPosition = RecyclerView.NO_POSITION;
-    private final List<MovieWithGenres> moviesWithGenres;
+    private List<MovieWithGenres> moviesWithGenres;
+    private List<MovieWithGenres> moviesWithGenresFull;
+    private List<MovieWithGenres> filteredMoviesWithGenres;
     private final MovieSelectedListener movieSelectedListener;
     private final FragmentActivity fragmentActivity;
     private static MovieWithGenres menuSelectedMovie;
@@ -38,6 +40,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
                                      MovieSelectedListener movieSelectedListener,
                                      FragmentActivity fragmentActivity) {
         this.moviesWithGenres = movies;
+        this.moviesWithGenresFull = new ArrayList<>(movies);
+        this.filteredMoviesWithGenres = new ArrayList<>(movies);
         this.movieSelectedListener = movieSelectedListener;
         this.fragmentActivity = fragmentActivity;
 
@@ -58,6 +62,23 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         notifyItemChanged(selectedPosition);
     }
 
+    public void setFilteredMoviesWithGenres(List<Genre> genres) {
+        List<MovieWithGenres> filteredList = new ArrayList<>();
+        if (genres == null || genres.size() == 0){
+            filteredList.addAll(moviesWithGenresFull);
+        } else {
+            for (MovieWithGenres movie: moviesWithGenresFull){
+                if (movie.genres.containsAll(genres)){
+                    filteredList.add(movie);
+                }
+            }
+        }
+        filteredMoviesWithGenres = filteredList;
+        moviesWithGenres = new ArrayList<>(filteredList);
+        notifyDataSetChanged();
+        resetSelectedPosition();
+    }
+
     public MovieWithGenres getMenuSelectedMovie(){
         return menuSelectedMovie;
     }
@@ -71,6 +92,42 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public int getItemCount() {
         return moviesWithGenres.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return movieFilter;
+    }
+
+    private Filter movieFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<MovieWithGenres> filteredList = new ArrayList<>();
+            if (charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(filteredMoviesWithGenres);
+            } else {
+                String filterPatter = charSequence.toString().toLowerCase().trim();
+                for (MovieWithGenres movie: filteredMoviesWithGenres){
+                    if (movie.movie.getTitle().toLowerCase().contains(filterPatter)){
+                        filteredList.add(movie);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            moviesWithGenres.clear();
+            moviesWithGenres.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+            resetSelectedPosition();
+        }
+    };
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener,
             View.OnLongClickListener{

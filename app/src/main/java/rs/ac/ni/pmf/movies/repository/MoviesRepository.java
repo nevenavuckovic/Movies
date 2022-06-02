@@ -44,6 +44,11 @@ public class MoviesRepository {
         return moviesDao.getActorsByMovie(title);
     }
 
+    public LiveData<List<MovieWithGenres>> getMoviesWithSearch(String text){
+        text = "%"+text+"%";
+        return moviesDao.getMoviesSearch(text);
+    }
+
     public void addMovie(Movie movie){
         MoviesDatabase.databaseExecutor.execute(()->moviesDao.insertMovie(movie));
     }
@@ -66,5 +71,9 @@ public class MoviesRepository {
 
     public void deleteMovie(long id) {
         MoviesDatabase.databaseExecutor.execute(()->moviesDao.deleteMovieById(id));
+    }
+
+    public LiveData<List<Genre>> getGenres() {
+        return genresDao.getAllGenres();
     }
 }

@@ -1,5 +1,6 @@
 package rs.ac.ni.pmf.movies.repository;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -20,7 +21,7 @@ public interface GenresDao {
     void insertGenre(Genre genre);
 
     @Query("SELECT * FROM genres")
-    List<Genre> getAllGenres();
+    LiveData<List<Genre>> getAllGenres();
 
     @Transaction
     @Query("SELECT * FROM genres WHERE genre LIKE :genre ")

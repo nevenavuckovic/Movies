@@ -38,4 +38,13 @@ public class Genre extends BaseObservable {
     public void setGenre(String genre) {
         this.genre = genre;
     }
+
+    @Override
+    public boolean equals(Object o){
+        Genre g = (Genre) o;
+        if (getGenre().equals(g.getGenre()) && getGenre_id() == g.getGenre_id()){
+            return true;
+        }
+        return false;
+    }
 }

@@ -24,7 +24,7 @@ import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
 
-public class MoviesListFragment extends Fragment {
+public class MoviesListFragment extends Fragment{
 
     private MoviesViewModel moviesViewModel;
     private MoviesRecyclerViewAdapter.MovieSelectedListener movieSelectedListener;
@@ -43,15 +43,11 @@ public class MoviesListFragment extends Fragment {
     public MoviesListFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static MoviesListFragment newInstance(int columnCount) {
-        MoviesListFragment fragment = new MoviesListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+
+    public static MoviesListFragment newInstance() {
+        return new MoviesListFragment();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +80,7 @@ public class MoviesListFragment extends Fragment {
                     movies -> {
                         moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(movies, movieSelectedListener, requireActivity());
                         recyclerView.setAdapter(moviesRecyclerViewAdapter);
+
                     });
         }
         return view;
@@ -105,7 +102,8 @@ public class MoviesListFragment extends Fragment {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         MovieWithGenres movieWithGenres = moviesRecyclerViewAdapter.getMenuSelectedMovie();
 
-        if (item.getItemId() == R.id.menu_update_movie){
+        if (item.getItemId() == R.id.menu_edit_movie){
+
             return true;
         }
         if (item.getItemId() == R.id.menu_delete_movie){

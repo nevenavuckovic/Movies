@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_update_movie"
-        android:title="@string/update_movie">
+        android:id="@+id/menu_edit_movie"
+        android:title="@string/edit_movie">
     </item>
     <item
         android:id="@+id/menu_delete_movie"
