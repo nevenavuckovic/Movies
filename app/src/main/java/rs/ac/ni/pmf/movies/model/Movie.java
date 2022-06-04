@@ -1,14 +1,16 @@
 package rs.ac.ni.pmf.movies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
 @Entity(tableName = "movies")
-public class Movie extends BaseObservable {
+public class Movie extends BaseObservable implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "movie_id")
     private long movie_id;
@@ -23,15 +25,51 @@ public class Movie extends BaseObservable {
     @ColumnInfo(name = "description")
     private String description;
 
-    public Movie(long movie_id, String title, String image, String director,
+    public Movie(String title, String image, String director,
                  long year, String description) {
-        this.movie_id = movie_id;
         this.title = title;
         this.image = image;
         this.director = director;
         this.year = year;
         this.description = description;
     }
+
+
+    protected Movie(Parcel in) {
+        movie_id = in.readLong();
+        title = in.readString();
+        image = in.readString();
+        director = in.readString();
+        year = in.readLong();
+        description = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(movie_id);
+        dest.writeString(title);
+        dest.writeString(image);
+        dest.writeString(director);
+        dest.writeLong(year);
+        dest.writeString(description);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     @Bindable
     public long getMovie_id() {

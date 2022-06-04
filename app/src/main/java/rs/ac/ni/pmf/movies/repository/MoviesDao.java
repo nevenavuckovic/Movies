@@ -18,7 +18,7 @@ import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 @Dao
 public interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMovie(Movie movie);
+    long insertMovie(Movie movie);
 
     @Update
     void updateMovie(Movie movie);
@@ -34,8 +34,8 @@ public interface MoviesDao {
     LiveData<List<Movie>> getAllMovies();
 
     @Transaction
-    @Query("SELECT * FROM movies WHERE movies.title like :title")
-    LiveData<MovieWithActors> getActorsByMovie(String title);
+    @Query("SELECT * FROM movies WHERE movies.movie_id = :id")
+    LiveData<MovieWithActors> getActorsByMovie(long id);
 
 
     @Transaction
@@ -53,5 +53,10 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE title LIKE :text")
     LiveData<List<MovieWithGenres>> getMoviesSearch(String text);
 
+    @Transaction
+    @Query("SELECT * FROM movies WHERE movie_id = :id")
+    LiveData<MovieWithActors> getMovieWithActors(long id);
 
+    @Query("SELECT count(*) FROM movies")
+    long getMovieCount();
 }

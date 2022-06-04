@@ -3,7 +3,6 @@ package rs.ac.ni.pmf.movies;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,21 +12,27 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import rs.ac.ni.pmf.movies.dialog.AddMovieDialog;
+import rs.ac.ni.pmf.movies.dialog.EditMovieDialog;
 import rs.ac.ni.pmf.movies.dialog.SelectGenresDialog;
 import rs.ac.ni.pmf.movies.fragment.MovieDetailsFragment;
 import rs.ac.ni.pmf.movies.fragment.MoviesRecyclerViewAdapter;
+import rs.ac.ni.pmf.movies.model.Actor;
 import rs.ac.ni.pmf.movies.model.Genre;
+import rs.ac.ni.pmf.movies.model.Movie;
+import rs.ac.ni.pmf.movies.model.MovieWithActors;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
 public class MainActivity extends AppCompatActivity implements MoviesRecyclerViewAdapter.MovieSelectedListener,
-        SelectGenresDialog.SelectGenresDialogListener {
+        SelectGenresDialog.SelectGenresDialogListener, AddMovieDialog.AddMovieDialogListener,
+        EditMovieDialog.EditMovieDialogListener {
 
     private MoviesViewModel moviesViewModel;
     private static MovieWithGenres movie = null;
+    private List<Genre> checkedGenres = new ArrayList<>();
 
 
     @Override
@@ -95,12 +100,14 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         }
         if (item.getItemId() == R.id.menu_select_genres){
             moviesViewModel.getGenres().observe(this, genres -> {
-                SelectGenresDialog selectGenresDialog = new SelectGenresDialog(genres);
+                SelectGenresDialog selectGenresDialog = new SelectGenresDialog(genres, checkedGenres);
                 selectGenresDialog.show(getSupportFragmentManager(), "SELECT_GENRES_DIALOG");
             });
             return true;
         }
         if (item.getItemId() == R.id.menu_add_movie){
+            AddMovieDialog addMovieDialog = new AddMovieDialog();
+            addMovieDialog.show(getSupportFragmentManager(), "ADD_MOVIE_DIALOG");
             return true;
         }
         return false;
@@ -112,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
             adapter.setFilteredMoviesWithGenres(checkedGenres);
-
+            this.checkedGenres = checkedGenres;
             onMovieSelected(null);
         } else {
 
@@ -120,7 +127,12 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     }
 
     @Override
-    public void onCancel() {
+    public void onAddMovie(Movie movie, List<Genre> genres, List<Actor> actors) {
+
+    }
+
+    @Override
+    public void onDone(MovieWithGenres movieWithGenres, MovieWithActors movieWithActors) {
 
     }
 }

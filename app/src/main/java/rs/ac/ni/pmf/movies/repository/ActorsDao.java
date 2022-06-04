@@ -19,17 +19,9 @@ import rs.ac.ni.pmf.movies.model.MovieWithActors;
 @Dao
 public interface ActorsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertActor(Actor actor);
+    long insertActor(Actor actor);
 
     @Query("SELECT * FROM actors")
     List<Actor> getAllActors();
-
-    @Transaction
-    @Query("SELECT * FROM movies")
-    LiveData<List<MovieWithActors>> getMovieActor();
-
-    @Transaction
-    @Query("SELECT * FROM actors WHERE actor LIKE :actor ")
-    List<ActorWithMovies> getMoviesByActor(String actor);
 
 }

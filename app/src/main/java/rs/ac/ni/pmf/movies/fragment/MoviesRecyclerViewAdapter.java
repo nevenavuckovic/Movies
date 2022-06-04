@@ -1,5 +1,6 @@
 package rs.ac.ni.pmf.movies.fragment;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +24,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     private static int selectedPosition = RecyclerView.NO_POSITION;
     private List<MovieWithGenres> moviesWithGenres;
-    private List<MovieWithGenres> moviesWithGenresFull;
+    private final List<MovieWithGenres> moviesWithGenresFull;
     private List<MovieWithGenres> filteredMoviesWithGenres;
     private final MovieSelectedListener movieSelectedListener;
     private final FragmentActivity fragmentActivity;
@@ -33,7 +34,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public interface MovieSelectedListener{
         void onMovieSelected(MovieWithGenres movie);
     }
-
 
 
     public MoviesRecyclerViewAdapter(List<MovieWithGenres> movies,
@@ -47,8 +47,9 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(FragmentMovieBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -98,7 +99,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         return movieFilter;
     }
 
-    private Filter movieFilter = new Filter() {
+    private final Filter movieFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<MovieWithGenres> filteredList = new ArrayList<>();
@@ -127,12 +128,10 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         }
     };
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener,
             View.OnLongClickListener{
         private MovieWithGenres movieWithGenres;
-        private FragmentMovieBinding binding;
+        private final FragmentMovieBinding binding;
 
         public ViewHolder(FragmentMovieBinding binding) {
             super(binding.getRoot());

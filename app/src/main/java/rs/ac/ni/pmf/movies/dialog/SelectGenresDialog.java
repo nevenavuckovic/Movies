@@ -20,21 +20,51 @@ public class SelectGenresDialog extends DialogFragment {
 
     public interface SelectGenresDialogListener {
         void onSearch(List<Genre> checkedGenres);
-        void onCancel();
     }
 
     private SelectGenresDialogListener listener;
-    private List<Genre> listOfGenres;
-    private List<String> list;
+    private ArrayList<Genre> listOfGenres;
+    private ArrayList<String> list;
     private boolean[] checkedGenres;
 
-    public SelectGenresDialog(List<Genre> listOfGenres){
-        this.listOfGenres = listOfGenres;
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("GENRES", listOfGenres);
+        outState.putStringArrayList("GENRES_NAMES", list);
+        outState.putBooleanArray("CHECKED", checkedGenres);
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            listOfGenres = savedInstanceState.getParcelableArrayList("GENRES");
+            list = savedInstanceState.getStringArrayList("GENRES_NAMES");
+            checkedGenres = savedInstanceState.getBooleanArray("CHECKED");
+
+        }
+    }
+
+    public SelectGenresDialog(){
+    }
+
+    public SelectGenresDialog(List<Genre> listOfGenres, List<Genre> checked){
+        this.listOfGenres = new ArrayList<>(listOfGenres);
         this.list = new ArrayList<>();
+        checkedGenres = new boolean[listOfGenres.size()];
+        int i = 0;
         for (Genre genre: listOfGenres){
             this.list.add(genre.getGenre());
+            for (Genre g: checked){
+                if (genre.equals(g)) {
+                    checkedGenres[i] = true;
+                    break;
+                }
+            }
+            i++;
         }
-        checkedGenres = new boolean[list.size()];
     }
 
     @Override
@@ -62,7 +92,7 @@ public class SelectGenresDialog extends DialogFragment {
                             listener.onSearch(genres);
                     })
                 .setNeutralButton(R.string.cancel,
-                        (dialogInterface, i) -> listener.onCancel())
+                        (dialogInterface, i) -> {})
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
         return alertDialog;

@@ -4,11 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import java.text.AttributedCharacterIterator;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import rs.ac.ni.pmf.movies.model.Actor;
 import rs.ac.ni.pmf.movies.model.Genre;
@@ -20,6 +16,7 @@ import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 
 public class MoviesRepository {
 
+    private final MoviesDatabase moviesDatabase;
     private final MoviesDao moviesDao;
     private final ActorsDao actorsDao;
     private final GenresDao genresDao;
@@ -27,7 +24,7 @@ public class MoviesRepository {
     private final MoviesActorsDao moviesActorsDao;
 
     public MoviesRepository(Context context){
-        final MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(context);
+        moviesDatabase = MoviesDatabase.getInstance(context);
         this.moviesDao = moviesDatabase.moviesDao();
         this.actorsDao = moviesDatabase.actorsDao();
         this.genresDao = moviesDatabase.genresDao();
@@ -37,43 +34,46 @@ public class MoviesRepository {
     }
 
     public LiveData<List<MovieWithGenres>> getMoviesWithGenres(){
-        return moviesDao.getMoviesWithGenres();
+        return moviesDatabase.submit(moviesDao::getMoviesWithGenres);
     }
 
-    public LiveData<MovieWithActors> getMoviesWithActors(String title){
-        return moviesDao.getActorsByMovie(title);
+    public LiveData<MovieWithActors> getMoviesWithActors(long id){
+        return moviesDatabase.submit(() -> moviesDao.getActorsByMovie(id));
     }
 
-    public LiveData<List<MovieWithGenres>> getMoviesWithSearch(String text){
-        text = "%"+text+"%";
-        return moviesDao.getMoviesSearch(text);
+    public long addMovie(Movie movie){
+        return moviesDatabase.submit(() -> moviesDao.insertMovie(movie));
     }
 
-    public void addMovie(Movie movie){
-        MoviesDatabase.databaseExecutor.execute(()->moviesDao.insertMovie(movie));
-    }
-
-    public void addGenre(Genre genre){
-        MoviesDatabase.databaseExecutor.execute(()->genresDao.insertGenre(genre));
+    public long addGenre(Genre genre){
+        return moviesDatabase.submit(() -> genresDao.insertGenre(genre));
     }
     public void addMovieGenre(MovieGenreCrossRef movieGenreCrossRef){
-        MoviesDatabase.databaseExecutor.execute(()->moviesGenresDao.insertMovieGenreCrossRef(movieGenreCrossRef));
+        moviesDatabase.execute(() -> moviesGenresDao.insertMovieGenreCrossRef(movieGenreCrossRef));
     }
 
-    public void addActor(Actor actor) {
-        MoviesDatabase.databaseExecutor.execute(()->actorsDao.insertActor(actor));
+    public long addActor(Actor actor) {
+        return moviesDatabase.submit(() -> actorsDao.insertActor(actor));
     }
 
     public void addMovieActor(MovieActorCrossRef movieActorCrossRef) {
-        MoviesDatabase.databaseExecutor.execute(()->moviesActorsDao.insertMovieActorCrossRef(movieActorCrossRef));
+        moviesDatabase.execute(() -> moviesActorsDao.insertMovieActorCrossRef(movieActorCrossRef));
 
     }
 
     public void deleteMovie(long id) {
-        MoviesDatabase.databaseExecutor.execute(()->moviesDao.deleteMovieById(id));
+        moviesDatabase.execute(()->moviesDao.deleteMovieById(id));
     }
 
     public LiveData<List<Genre>> getGenres() {
-        return genresDao.getAllGenres();
+        return moviesDatabase.submit(genresDao::getAllGenres);
+    }
+
+    public LiveData<MovieWithActors> getMovieWithActors(long id) {
+        return moviesDatabase.submit(() -> moviesDao.getMovieWithActors(id));
+    }
+
+    public long getMovieCount(){
+        return moviesDatabase.submit(()->moviesDao.getMovieCount());
     }
 }

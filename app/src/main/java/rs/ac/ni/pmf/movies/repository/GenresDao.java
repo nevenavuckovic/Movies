@@ -18,13 +18,9 @@ import rs.ac.ni.pmf.movies.model.GenreWithMovies;
 @Dao
 public interface GenresDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertGenre(Genre genre);
+    long insertGenre(Genre genre);
 
     @Query("SELECT * FROM genres")
     LiveData<List<Genre>> getAllGenres();
-
-    @Transaction
-    @Query("SELECT * FROM genres WHERE genre LIKE :genre ")
-    List<GenreWithMovies> getMoviesByGenre(String genre);
 
 }

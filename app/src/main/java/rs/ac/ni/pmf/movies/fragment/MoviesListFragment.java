@@ -11,15 +11,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import rs.ac.ni.pmf.movies.R;
-import rs.ac.ni.pmf.movies.model.MovieWithActors;
+import rs.ac.ni.pmf.movies.dialog.EditMovieDialog;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
@@ -36,16 +34,7 @@ public class MoviesListFragment extends Fragment{
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public MoviesListFragment() {
-    }
-
-
-    public static MoviesListFragment newInstance() {
-        return new MoviesListFragment();
     }
 
 
@@ -103,7 +92,10 @@ public class MoviesListFragment extends Fragment{
         MovieWithGenres movieWithGenres = moviesRecyclerViewAdapter.getMenuSelectedMovie();
 
         if (item.getItemId() == R.id.menu_edit_movie){
-
+            moviesViewModel.getMovie(movieWithGenres.movie.getMovie_id()).observe(this,
+                    movieWithActors -> {
+                        EditMovieDialog editMovieDialog = new EditMovieDialog(movieWithGenres, movieWithActors);
+                        editMovieDialog.show(getParentFragmentManager(), "EDIT_MOVIE_DIALOG");});
             return true;
         }
         if (item.getItemId() == R.id.menu_delete_movie){
