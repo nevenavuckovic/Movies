@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.Arrays;
+import java.util.List;
 
 import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.databinding.EditMovieDialogBinding;
@@ -20,7 +24,8 @@ import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 public class EditMovieDialog extends DialogFragment {
 
     public interface EditMovieDialogListener {
-        void onDone(MovieWithGenres movieWithGenres, MovieWithActors movieWithActors);
+        void onDone(MovieWithGenres movieWithGenres, MovieWithActors movieWithActors,
+                    List<String> genres, List<String> actors);
     }
 
     private EditMovieDialog.EditMovieDialogListener listener;
@@ -72,7 +77,15 @@ public class EditMovieDialog extends DialogFragment {
                     EditText editTextActors = layout.findViewById(R.id.edit_actors);
                     EditText editTextGenres = layout.findViewById(R.id.edit_genres);
                     EditText editTextYear = layout.findViewById(R.id.edit_year);
-                    listener.onDone(movieWithGenres, movieWithActors);
+                    if(movieWithGenres.movie.getYear() < 1900 ||
+                            movieWithGenres.movie.getDirector().equals("") ||
+                            movieWithGenres.movie.getDescription().equals("")){
+                        Toast.makeText(requireActivity(), "All fields must be filled", Toast.LENGTH_SHORT).show();
+                    } else {
+                        listener.onDone(movieWithGenres, movieWithActors,
+                                Arrays.asList(editTextGenres.getText().toString().split("\\s*,\\s*")),
+                                Arrays.asList(editTextActors.getText().toString().split("\\s*,\\s*")));
+                    }
                 })
                 .setNeutralButton(R.string.cancel,
                         (dialogInterface, i) -> {})

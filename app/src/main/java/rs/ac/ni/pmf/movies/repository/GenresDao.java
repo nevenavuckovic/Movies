@@ -23,4 +23,6 @@ public interface GenresDao {
     @Query("SELECT * FROM genres")
     LiveData<List<Genre>> getAllGenres();
 
+    @Query("SELECT genre_id FROM genres WHERE genre LIKE :s")
+    long getGenre(String s);
 }

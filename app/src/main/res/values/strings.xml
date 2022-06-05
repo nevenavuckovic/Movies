@@ -27,7 +27,7 @@
     <string name="year_dialog">"Year: "</string>
     <string name="genres_dialog">"Genres: "</string>
     <string name="description_dialog">"Description: "</string>
-
+    <string name="sort">Sort</string>
 
 
 </resources>

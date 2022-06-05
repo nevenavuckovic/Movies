@@ -74,6 +74,22 @@ public class MoviesRepository {
     }
 
     public long getMovieCount(){
-        return moviesDatabase.submit(()->moviesDao.getMovieCount());
+        return moviesDatabase.submit(moviesDao::getMovieCount);
+    }
+
+    public void updateMovie(Movie movie) {
+        moviesDatabase.execute(() -> moviesDao.updateMovie(movie));
+    }
+
+    public long getActorId(String s) {
+        return moviesDatabase.submit(() -> actorsDao.getActor(s));
+    }
+
+    public long getGenreId(String s) {
+        return moviesDatabase.submit(() -> genresDao.getGenre(s));
+    }
+
+    public long getMovieId(String title) {
+        return moviesDatabase.submit(() -> moviesDao.getMovieId(title));
     }
 }

@@ -17,6 +17,9 @@ import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>
@@ -127,6 +130,25 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
             resetSelectedPosition();
         }
     };
+
+    public void sort(String checkedSort) {
+        switch (checkedSort) {
+            case "None":
+                moviesWithGenres = new ArrayList<>(filteredMoviesWithGenres);
+                break;
+            case "Ascending":
+                moviesWithGenres.sort((movie1, movie2) ->
+                        movie1.movie.getTitle().compareToIgnoreCase(movie2.movie.getTitle()));
+                break;
+            case "Descending":
+                moviesWithGenres.sort((movie1, movie2) ->
+                        movie1.movie.getTitle().compareToIgnoreCase(movie2.movie.getTitle()));
+                Collections.reverse(moviesWithGenres);
+                break;
+        }
+        notifyDataSetChanged();
+        resetSelectedPosition();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener,
             View.OnLongClickListener{

@@ -24,4 +24,6 @@ public interface ActorsDao {
     @Query("SELECT * FROM actors")
     List<Actor> getAllActors();
 
+    @Query("SELECT actor_id FROM actors WHERE actor LIKE :s")
+    long getActor(String s);
 }

@@ -59,4 +59,7 @@ public interface MoviesDao {
 
     @Query("SELECT count(*) FROM movies")
     long getMovieCount();
+
+    @Query("SELECT movie_id FROM movies WHERE title LIKE :title")
+    long getMovieId(String title);
 }
