@@ -47,6 +47,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_add_name" />
 
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_add_image"
+        />
+
     <TextView
         android:id="@+id/text_add_director"
         android:layout_width="wrap_content"
@@ -56,7 +66,7 @@
         android:text="@string/director_dialog"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_add_image"
+        app:layout_constraintTop_toBottomOf="@+id/add_button"
         tools:text="@string/hint" />
 
     <EditText
@@ -68,7 +78,7 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_add_director"
-        app:layout_constraintTop_toBottomOf="@+id/movie_add_image" />
+        app:layout_constraintTop_toBottomOf="@+id/add_button" />
 
     <TextView
         android:id="@+id/text_add_actors"

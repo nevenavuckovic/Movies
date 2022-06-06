@@ -1,6 +1,8 @@
 package rs.ac.ni.pmf.movies.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.ByteArrayOutputStream;
+
+import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.databinding.FragmentMovieDetailsBinding;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
@@ -44,14 +49,17 @@ public class MovieDetailsFragment extends Fragment {
         moviesViewModel.getSelectedMovieWithGenres().observe(fragmentActivity, movieWithGenres -> {
             binding.setMovieWithGenres(movieWithGenres);
             if (movieWithGenres != null) {
-                if (!movieWithGenres.movie.getImage().equals("")) {
-                    binding.movieImage.setImageResource(context.getResources().getIdentifier(movieWithGenres.movie.getImage(),
-                            "drawable", context.getPackageName()));
+                if (movieWithGenres.movie.getImage() != null) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(movieWithGenres.movie.getImage(), 0,
+                            movieWithGenres.movie.getImage().length);
+                    binding.movieImage.setImageBitmap(Bitmap.createScaledBitmap(bmp,
+                            200, 250, false));
                 } else {
                     binding.movieImage.setImageResource(context.getResources().getIdentifier("no_image",
                             "drawable", context.getPackageName()));
                 }
-                moviesViewModel.getSelectedMovieWithActors().observe(fragmentActivity, movie -> binding.setMovieWithActors(movie));
+                moviesViewModel.getSelectedMovieWithActors().observe(fragmentActivity,
+                        movie -> binding.setMovieWithActors(movie));
             }
 
         });

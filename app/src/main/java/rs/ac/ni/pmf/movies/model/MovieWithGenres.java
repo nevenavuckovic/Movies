@@ -34,7 +34,6 @@ public class MovieWithGenres extends BaseObservable implements Parcelable {
         this.genres = genres;
     }
 
-
     protected MovieWithGenres(Parcel in) {
         movie = in.readParcelable(Movie.class.getClassLoader());
         genres = in.createTypedArrayList(Genre.CREATOR);

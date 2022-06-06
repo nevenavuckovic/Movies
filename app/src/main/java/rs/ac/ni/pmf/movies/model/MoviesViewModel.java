@@ -1,14 +1,18 @@
 package rs.ac.ni.pmf.movies.model;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.repository.MoviesRepository;
 
 public class MoviesViewModel extends AndroidViewModel {
@@ -25,9 +29,9 @@ public class MoviesViewModel extends AndroidViewModel {
 
         if (moviesRepository.getMovieCount() == 0) {
             long movie1 = moviesRepository.addMovie(new Movie
-                    ("Iron Man", "iron_man", "nekko", 2008, "nessto"));
+                    ("Iron Man", getImageRes(R.drawable.iron_man), "nekko", 2008, "nessto"));
             long movie2 = moviesRepository.addMovie(new Movie
-                    ("The Avengers", "the_avengers", "nio", 2012, "nit"));
+                    ("The Avengers", getImageRes(R.drawable.the_avengers), "nio", 2012, "nit"));
 
             long genre1 = moviesRepository.addGenre(new Genre("Action"));
             long genre2 = moviesRepository.addGenre(new Genre("Adventure"));
@@ -46,6 +50,13 @@ public class MoviesViewModel extends AndroidViewModel {
             moviesRepository.addMovieActor(new MovieActorCrossRef(movie2, actor2));
         }
 
+    }
+
+    public byte[] getImageRes(int id){
+        Bitmap bitmap = BitmapFactory.decodeResource(getApplication().getResources(), id);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 
 

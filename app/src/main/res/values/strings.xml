@@ -28,6 +28,7 @@
     <string name="genres_dialog">"Genres: "</string>
     <string name="description_dialog">"Description: "</string>
     <string name="sort">Sort</string>
+    <string name="button">Change picture</string>
 
 
 </resources>

@@ -34,6 +34,7 @@ public class MovieWithActors extends BaseObservable implements Parcelable {
         this.actors = actors;
     }
 
+
     protected MovieWithActors(Parcel in) {
         movie = in.readParcelable(Movie.class.getClassLoader());
         actors = in.createTypedArrayList(Actor.CREATOR);

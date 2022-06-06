@@ -99,7 +99,7 @@ public class EditMovieDialog extends DialogFragment {
                         actors.removeIf(String::isEmpty);
                         List<String> genres = Arrays.asList(genre.split("\\s*,\\s*"));
                         genres.removeIf(String::isEmpty);
-                        Movie movie = new Movie(movieWithGenres.movie.getTitle(), "no_image", director,
+                        Movie movie = new Movie(movieWithGenres.movie.getTitle(), null, director,
                                 Long.parseLong(year), description);
                         movie.setMovie_id(movieWithGenres.movie.getMovie_id());
                         listener.onDone(movie, actors, genres);

@@ -17,7 +17,7 @@ public class Movie extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "title")
     private String title;
     @ColumnInfo(name = "image")
-    private String image;
+    private byte[] image;
     @ColumnInfo(name = "director")
     private String director;
     @ColumnInfo(name = "year")
@@ -25,7 +25,7 @@ public class Movie extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "description")
     private String description;
 
-    public Movie(String title, String image, String director,
+    public Movie(String title, byte[] image, String director,
                  long year, String description) {
         this.title = title;
         this.image = image;
@@ -38,7 +38,7 @@ public class Movie extends BaseObservable implements Parcelable {
     protected Movie(Parcel in) {
         movie_id = in.readLong();
         title = in.readString();
-        image = in.readString();
+        image = in.createByteArray();
         director = in.readString();
         year = in.readLong();
         description = in.readString();
@@ -48,7 +48,7 @@ public class Movie extends BaseObservable implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(movie_id);
         dest.writeString(title);
-        dest.writeString(image);
+        dest.writeByteArray(image);
         dest.writeString(director);
         dest.writeLong(year);
         dest.writeString(description);
@@ -82,7 +82,7 @@ public class Movie extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
@@ -109,7 +109,7 @@ public class Movie extends BaseObservable implements Parcelable {
         this.title = title;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
