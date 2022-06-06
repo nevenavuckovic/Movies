@@ -92,4 +92,12 @@ public class MoviesRepository {
     public long getMovieId(String title) {
         return moviesDatabase.submit(() -> moviesDao.getMovieId(title));
     }
+
+    public void deleteMovieGenre(long movie_id) {
+        moviesDatabase.execute(() -> moviesGenresDao.deleteMovieGenre(movie_id));
+    }
+
+    public void deleteMovieActor(long movie_id) {
+        moviesDatabase.execute(() -> moviesActorsDao.deleteMovieActor(movie_id));
+    }
 }

@@ -80,40 +80,24 @@ public class MoviesViewModel extends AndroidViewModel {
         return moviesRepository.getMovieWithActors(id);
     }
 
-    public void updateMovie(MovieWithGenres movieWithGenres, MovieWithActors movieWithActors,
-                            List<String> genres, List<String> actors){
-        moviesRepository.updateMovie(movieWithGenres.movie);
-        for(String s: genres){
-            boolean contains = false;
-            for(Genre genre: movieWithGenres.genres){
-                if(genre.getGenre().equals(s)){
-                    contains = true;
-                    break;
-                }
+    public void updateMovie(Movie movie, List<String> genres, List<String> actors){
+        long movie_id = movie.getMovie_id();
+        moviesRepository.updateMovie(movie);
+        moviesRepository.deleteMovieGenre(movie_id);
+        for (String s: genres){
+            long genre_id = moviesRepository.getGenreId(s);
+            if(genre_id == 0L){
+                genre_id = moviesRepository.addGenre(new Genre(s));
             }
-            if(!contains){
-                long genre_id = moviesRepository.getGenreId(s);
-                if(genre_id == 0L){
-                    genre_id = moviesRepository.addGenre(new Genre(s));
-                }
-                moviesRepository.addMovieGenre(new MovieGenreCrossRef(movieWithGenres.movie.getMovie_id(), genre_id));
-            }
+            moviesRepository.addMovieGenre(new MovieGenreCrossRef(movie_id, genre_id));
         }
+        moviesRepository.deleteMovieActor(movie_id);
         for(String s: actors){
-            boolean contains = false;
-            for(Actor actor: movieWithActors.actors){
-                if(actor.getActor().equals(s)){
-                    contains = true;
-                    break;
-                }
+            long actor_id = moviesRepository.getActorId(s);
+            if (actor_id == 0L) {
+                actor_id = moviesRepository.addActor(new Actor(s));
             }
-            if(!contains){
-                long actor_id = moviesRepository.getActorId(s);
-                if (actor_id == 0L) {
-                    actor_id = moviesRepository.addActor(new Actor(s));
-                }
-                moviesRepository.addMovieActor(new MovieActorCrossRef(movieWithGenres.movie.getMovie_id(), actor_id));
-            }
+            moviesRepository.addMovieActor(new MovieActorCrossRef(movie_id, actor_id));
         }
     }
 

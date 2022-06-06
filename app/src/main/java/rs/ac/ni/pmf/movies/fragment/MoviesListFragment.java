@@ -34,6 +34,8 @@ public class MoviesListFragment extends Fragment{
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
+    public static boolean done = false;
+
     public MoviesListFragment() {
     }
 
@@ -92,10 +94,15 @@ public class MoviesListFragment extends Fragment{
         MovieWithGenres movieWithGenres = moviesRecyclerViewAdapter.getMenuSelectedMovie();
 
         if (item.getItemId() == R.id.menu_edit_movie){
+            done = false;
             moviesViewModel.getMovie(movieWithGenres.movie.getMovie_id()).observe(this,
                     movieWithActors -> {
-                        EditMovieDialog editMovieDialog = new EditMovieDialog(movieWithGenres, movieWithActors);
-                        editMovieDialog.show(getParentFragmentManager(), "EDIT_MOVIE_DIALOG");});
+                        if (!done) {
+                            EditMovieDialog editMovieDialog = new EditMovieDialog(movieWithGenres, movieWithActors);
+                            editMovieDialog.show(getParentFragmentManager(), "EDIT_MOVIE_DIALOG");
+                        }
+                    });
+            moviesRecyclerViewAdapter.resetSelectedPosition();
             return true;
         }
         if (item.getItemId() == R.id.menu_delete_movie){

@@ -135,20 +135,17 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
 
     @Override
     public void onAddMovie(Movie movie, List<String> genres, List<String> actors) {
-        if (moviesViewModel.getMovieId(movie.getTitle()) == 0L) {
-            moviesViewModel.addMovie(movie, genres, actors);
-        } else {
+        if (moviesViewModel.getMovieId(movie.getTitle()) != 0L) {
             Toast.makeText(this, "Movie with this title already exist!", Toast.LENGTH_SHORT).show();
+        } else {
+            moviesViewModel.addMovie(movie, genres, actors);
         }
-        onMovieSelected(null);
-
     }
 
     @Override
-    public void onDone(MovieWithGenres movieWithGenres, MovieWithActors movieWithActors,
-                       List<String> genres, List<String> actors) {
-        moviesViewModel.updateMovie(movieWithGenres, movieWithActors, genres, actors);
-        onMovieSelected(null);//not working
+    public void onDone(Movie movie, List<String> genres, List<String> actors) {
+        moviesViewModel.updateMovie(movie, genres, actors);
+        onMovieSelected(null);
     }
 
     @Override

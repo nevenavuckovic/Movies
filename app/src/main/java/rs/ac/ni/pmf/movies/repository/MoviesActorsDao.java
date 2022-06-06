@@ -17,5 +17,7 @@ public interface MoviesActorsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovieActorCrossRef(MovieActorCrossRef movieActorCrossRef);
 
-
+    @Transaction
+    @Query("DELETE FROM movies_actors WHERE movie_id = :movie_id")
+    void deleteMovieActor(long movie_id);
 }
