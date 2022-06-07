@@ -45,9 +45,24 @@ public class AddMovieDialog extends DialogFragment {
     private AddMovieDialog.AddMovieDialogListener listener;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private Movie movie;
+    private View layout;
 
     public AddMovieDialog(){
-        movie = new Movie("", null, "", 2000, "");
+        movie = new Movie("", null, "", 2022, "");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("MOVIE", movie);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            movie = savedInstanceState.getParcelable("MOVIE");
+        }
     }
 
     @Override
@@ -55,28 +70,27 @@ public class AddMovieDialog extends DialogFragment {
         super.onAttach(context);
         listener = (AddMovieDialog.AddMovieDialogListener) context;
 
-        final View layout = getLayoutInflater().inflate(R.layout.add_movie_dialog, null);
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         try {
                             final Uri imageUri = result.getData().getData();
-                            final InputStream imageStream = requireContext().getContentResolver().openInputStream(imageUri);
+                            final InputStream imageStream = context.getContentResolver().openInputStream(imageUri);
+                            final String mimeType = context.getContentResolver().getType(imageUri);
                             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        //    if(imageUri.toString().endsWith(".png")) {
-                         //       selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        //    } else if(imageUri.toString().endsWith(".jpg")){
+                            if(mimeType.endsWith("png")) {
+                                selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            } else if(mimeType.endsWith("jpg") || mimeType.endsWith("jpeg")){
                                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        //    } else {
-                        //        Toast.makeText(requireActivity(), "Supported formats are PNG and JPEG", Toast.LENGTH_LONG).show();
-                         //   }
+                            } else {
+                                Toast.makeText(requireActivity(), "Supported formats are PNG and JPEG", Toast.LENGTH_LONG).show();
+                            }
                             byte[] byteArray = stream.toByteArray();
                             movie.setImage(byteArray);
-                            ImageView imageView = layout.findViewById(R.id.movie_add_image); // not working
-                            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200, 250, false));
+                            ImageView imageView = layout.findViewById(R.id.movie_add_image);
+                            imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 200, 250, false));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -90,13 +104,19 @@ public class AddMovieDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        final View layout = getLayoutInflater().inflate(R.layout.add_movie_dialog, null);
+        layout = getLayoutInflater().inflate(R.layout.add_movie_dialog, null);
         Button button = layout.findViewById(R.id.add_button);
         button.setOnClickListener(view -> {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
             activityResultLauncher.launch(photoPickerIntent);
         });
+
+        ImageView imageView = layout.findViewById(R.id.movie_add_image);
+        if (movie.getImage() != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(movie.getImage(), 0, movie.getImage().length);
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200, 250, false));
+        }
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         final AlertDialog alertDialog = builder.setView(layout)

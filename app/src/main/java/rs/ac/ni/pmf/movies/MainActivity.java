@@ -146,6 +146,13 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     public void onDone(Movie movie, List<String> genres, List<String> actors) {
         moviesViewModel.updateMovie(movie, genres, actors);
         onMovieSelected(null);
+        //todo Selected = -1
+    }
+
+    @Override
+    public void onCancel() {
+        onMovieSelected(null);
+        //todo Selected = -1
     }
 
     @Override
