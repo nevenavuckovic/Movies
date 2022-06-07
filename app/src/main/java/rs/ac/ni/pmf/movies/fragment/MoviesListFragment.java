@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Arrays;
+
 import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.dialog.EditMovieDialog;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
@@ -98,7 +100,9 @@ public class MoviesListFragment extends Fragment{
             moviesViewModel.getMovie(movieWithGenres.movie.getMovie_id()).observe(this,
                     movieWithActors -> {
                         if (!done) {
-                            EditMovieDialog editMovieDialog = new EditMovieDialog(movieWithGenres, movieWithActors);
+                            EditMovieDialog editMovieDialog = new EditMovieDialog(movieWithGenres.movie,
+                                    Arrays.asList(movieWithGenres.toString().split("\\s*,\\s*")),
+                                    Arrays.asList(movieWithActors.toString().split("\\s*,\\s*")));
                             editMovieDialog.show(getParentFragmentManager(), "EDIT_MOVIE_DIALOG");
                         }
                     });

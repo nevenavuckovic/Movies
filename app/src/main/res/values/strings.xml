@@ -3,7 +3,7 @@
     <string name="hint">Text</string>
     <string name="title">Title: %s</string>
     <string name="director">Director: %s</string>
-    <string name="actors">Actors: %s</string>
+    <string name="actors">Cast: %s</string>
     <string name="year">Year: %s</string>
     <string name="genres">Genres: %s</string>
     <string name="description">Description: %s</string>
@@ -21,12 +21,12 @@
     <string name="hint_year">2022</string>
     <string name="hint_genres">Genre1, Genre2, Genre3…</string>
     <string name="hint_description">This movie is about…</string>
-    <string name="title_dialog">"Title: "</string>
-    <string name="director_dialog">"Director: "</string>
-    <string name="actors_dialog">"Actors: "</string>
-    <string name="year_dialog">"Year: "</string>
-    <string name="genres_dialog">"Genres: "</string>
-    <string name="description_dialog">"Description: "</string>
+    <string name="title_dialog">Title: </string>
+    <string name="director_dialog">Director: </string>
+    <string name="actors_dialog">Cast: </string>
+    <string name="year_dialog">Year: </string>
+    <string name="genres_dialog">Genres: </string>
+    <string name="description_dialog">Description: </string>
     <string name="sort">Sort</string>
     <string name="button">Change picture</string>
 

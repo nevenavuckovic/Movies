@@ -11,8 +11,6 @@
         <variable
             name="movieWithActors"
             type="rs.ac.ni.pmf.movies.model.MovieWithActors" />
-
-
     </data>
 
     <FrameLayout

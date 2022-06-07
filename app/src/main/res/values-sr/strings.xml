@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Филмови</string>
+    <string name="hint">Текст</string>
+    <string name="title">Наслов: %s</string>
+    <string name="director">Режисер: %s</string>
+    <string name="actors">Улоге: %s</string>
+    <string name="year">Година: %s</string>
+    <string name="genres">Жанрови: %s</string>
+    <string name="description">Опис: %s</string>
+    <string name="select_movie">Изаберите филм</string>
+    <string name="delete_movie">Избриши филм</string>
+    <string name="add_movie">Додај филм</string>
+    <string name="edit_movie">Измени филм</string>
+    <string name="search">Претражи</string>
+    <string name="cancel">Откажи</string>
+    <string name="select_genres">Изаберите жанр</string>
+    <string name="done">Готово</string>
+    <string name="hint_title">Наслов</string>
+    <string name="hint_director">Име</string>
+    <string name="hint_actors">Име1, Име2, Име3…</string>
+    <string name="hint_year">2022</string>
+    <string name="hint_genres">Жанр1, Жанр2, Жанр3…</string>
+    <string name="hint_description">Овај филм је о…</string>
+    <string name="title_dialog">Наслов: </string>
+    <string name="director_dialog">Режисер: </string>
+    <string name="actors_dialog">Улоге: </string>
+    <string name="year_dialog">Година: </string>
+    <string name="genres_dialog">Жанр: </string>
+    <string name="description_dialog">Опис: </string>
+    <string name="sort">Сортирај</string>
+    <string name="button">Промени слику</string>
+
+</resources>

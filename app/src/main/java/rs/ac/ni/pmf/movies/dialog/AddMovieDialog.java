@@ -8,10 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -30,31 +26,44 @@ import java.util.Arrays;
 import java.util.List;
 
 import rs.ac.ni.pmf.movies.R;
-import rs.ac.ni.pmf.movies.fragment.MoviesListFragment;
-import rs.ac.ni.pmf.movies.model.Actor;
-import rs.ac.ni.pmf.movies.model.Genre;
+import rs.ac.ni.pmf.movies.databinding.AddMovieDialogBinding;
 import rs.ac.ni.pmf.movies.model.Movie;
-import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
 public class AddMovieDialog extends DialogFragment {
 
+
     public interface AddMovieDialogListener {
-        void onAddMovie(Movie movie, List<String> genres, List<String> actors);
+        void onAddMovie(Movie movie, List<String> genres, List<String> actors, boolean resultOk);
     }
 
     private AddMovieDialog.AddMovieDialogListener listener;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private Movie movie;
-    private View layout;
+    private List<String> genres;
+    private List<String> actors;
+    private AddMovieDialogBinding binding;
+    private byte[] img;
 
     public AddMovieDialog(){
         movie = new Movie("", null, "", 2022, "");
     }
 
+    public AddMovieDialog(Movie movie,  List<String> genres, List<String> actors){
+        this.movie = movie;
+        this.genres = genres;
+        this.actors = actors;
+        this.img = movie.getImage();
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        img = movie.getImage();
+        outState.putByteArray("IMG", img);
+        movie.setImage(null);
         outState.putParcelable("MOVIE", movie);
+        outState.putStringArrayList("GENRES", new ArrayList<>(genres));
+        outState.putStringArrayList("ACTORS", new ArrayList<>(actors));
     }
 
     @Override
@@ -62,6 +71,10 @@ public class AddMovieDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null){
             movie = savedInstanceState.getParcelable("MOVIE");
+            img = savedInstanceState.getByteArray("IMG");
+            movie.setImage(img);
+            genres = savedInstanceState.getStringArrayList("GENRES");
+            actors = savedInstanceState.getStringArrayList("ACTORS");
         }
     }
 
@@ -69,6 +82,7 @@ public class AddMovieDialog extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         listener = (AddMovieDialog.AddMovieDialogListener) context;
+
 
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -89,8 +103,8 @@ public class AddMovieDialog extends DialogFragment {
                             }
                             byte[] byteArray = stream.toByteArray();
                             movie.setImage(byteArray);
-                            ImageView imageView = layout.findViewById(R.id.movie_add_image);
-                            imageView.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 200, 250, false));
+                            binding.movieAddImage.setImageBitmap(Bitmap.createScaledBitmap(selectedImage, 200, 250, false));
+
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -104,53 +118,45 @@ public class AddMovieDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        layout = getLayoutInflater().inflate(R.layout.add_movie_dialog, null);
-        Button button = layout.findViewById(R.id.add_button);
-        button.setOnClickListener(view -> {
+        binding = AddMovieDialogBinding.inflate(getLayoutInflater());
+        binding.setMovie(movie);
+
+        binding.addButton.setOnClickListener(view -> {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
             activityResultLauncher.launch(photoPickerIntent);
         });
 
-        ImageView imageView = layout.findViewById(R.id.movie_add_image);
         if (movie.getImage() != null) {
             Bitmap bmp = BitmapFactory.decodeByteArray(movie.getImage(), 0, movie.getImage().length);
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200, 250, false));
+            binding.movieAddImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200, 250, false));
         }
 
+        if (genres != null)
+            binding.editAddGenres.setText(TextUtils.join(", ", genres));
+        if (actors != null)
+            binding.editAddActors.setText(TextUtils.join(", ", actors));
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        final AlertDialog alertDialog = builder.setView(layout)
+        final AlertDialog alertDialog = builder.setView(binding.getRoot())
                 .setTitle(R.string.add_movie)
                 .setPositiveButton(R.string.add_movie, (dialogInterface, i) -> {
 
-                    EditText editTextActors = layout.findViewById(R.id.edit_add_actors);
-                    EditText editTextGenres = layout.findViewById(R.id.edit_add_genres);
-                    EditText editTextYear = layout.findViewById(R.id.edit_add_year);
-                    EditText editTextTitle = layout.findViewById(R.id.edit_add_name);
-                    EditText editTextDirector = layout.findViewById(R.id.edit_add_director);
-                    EditText editTextDescription = layout.findViewById(R.id.edit_add_description);
-                    String actor = editTextGenres.getText().toString();
-                    String genre = editTextActors.getText().toString();
-                    String year = editTextYear.getText().toString();
-                    String title = editTextTitle.getText().toString();
-                    String director = editTextDirector.getText().toString();
-                    String description = editTextDescription.getText().toString();
+                    actors = Arrays.asList(binding.editAddActors.getText().toString().split("\\s*,\\s*"));
+                    genres = Arrays.asList(binding.editAddGenres.getText().toString().split("\\s*,\\s*"));
 
-                    if(actor.chars().noneMatch(Character::isLetter) || genre.chars().noneMatch(Character::isLetter) ||
-                           title.chars().noneMatch(Character::isLetter) || director.chars().noneMatch(Character::isLetter)
-                            || year.equals("") || description.equals("")){
+                    if(binding.editAddActors.getText().toString().chars().noneMatch(Character::isLetter) ||
+                            binding.editAddGenres.getText().toString().chars().noneMatch(Character::isLetter) ||
+                            movie.getTitle().chars().noneMatch(Character::isLetter) || movie.getTitle().chars().noneMatch(Character::isLetter)
+                            || binding.editAddYear.getText().toString().equals("") || movie.getDescription().equals("")){
                         Toast.makeText(requireActivity(), "All fields must be filled correctly",
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
+                        listener.onAddMovie(movie, genres, actors,false);
                     } else {
-                        List<String> actors = Arrays.asList(actor.split("\\s*,\\s*"));
                         actors.removeIf(String::isEmpty);
-                        List<String> genres = Arrays.asList(genre.split("\\s*,\\s*"));
                         genres.removeIf(String::isEmpty);
-                        movie.setTitle(title);
-                        movie.setDirector(director);
-                        movie.setYear(Long.parseLong(year));
-                        movie.setDescription(description);
-                        listener.onAddMovie(movie, actors, genres);
+                        movie.setYear(Long.parseLong(binding.editAddYear.getText().toString()));
+                        listener.onAddMovie(movie, genres, actors,true);
                     }
                 })
                 .setNeutralButton(R.string.cancel,

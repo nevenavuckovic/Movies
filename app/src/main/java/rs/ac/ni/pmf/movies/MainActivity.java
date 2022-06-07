@@ -34,8 +34,13 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     private MoviesViewModel moviesViewModel;
     private static MovieWithGenres movie = null;
     private static List<Genre> checkedGenres = new ArrayList<>();
-    private static String checkedSort = "None";
+    private static String checkedSort = "None"; //todo fix, check when on details, edit
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("MOVIE", movie);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +91,14 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
 
                 @Override
                 public boolean onQueryTextChange(String s) {
+
                     RecyclerView recyclerView = findViewById(R.id.list);
                     if (recyclerView != null) {
                         MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
-                        adapter.getFilter().filter(s);
-                        onMovieSelected(null);
+                        if (adapter != null) {
+                            adapter.getFilter().filter(s);
+                            onMovieSelected(null);
+                        }
                     } else {
                         Toast.makeText(MainActivity.this, "Return to list to search it", Toast.LENGTH_SHORT).show();
                     }
@@ -125,34 +133,60 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         RecyclerView recyclerView = findViewById(R.id.list);
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
-            adapter.setFilteredMoviesWithGenres(checkedGenres);
-            this.checkedGenres = checkedGenres;
-            onMovieSelected(null);
+            if (adapter != null) {
+                adapter.setFilteredMoviesWithGenres(checkedGenres);
+                MainActivity.checkedGenres = checkedGenres;
+                onMovieSelected(null);
+            }
         } else {
-            Toast.makeText(this, "Return to list to filter it", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Return to list to filter it", Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
-    public void onAddMovie(Movie movie, List<String> genres, List<String> actors) {
-        if (moviesViewModel.getMovieId(movie.getTitle()) != 0L) {
-            Toast.makeText(this, "Movie with this title already exist!", Toast.LENGTH_SHORT).show();
+    public void onAddMovie(Movie movie, List<String> genres, List<String> actors, boolean resultOk) {
+        if (resultOk) {
+            if (moviesViewModel.getMovieId(movie.getTitle()) != 0L) {
+                Toast.makeText(this, "Movie with this title already exist!", Toast.LENGTH_LONG).show();
+                AddMovieDialog addMovieDialog = new AddMovieDialog(movie, genres, actors);
+                addMovieDialog.show(getSupportFragmentManager(), "ADD_MOVIE_DIALOG");
+            } else {
+                moviesViewModel.addMovie(movie, genres, actors);
+            }
         } else {
-            moviesViewModel.addMovie(movie, genres, actors);
+            AddMovieDialog addMovieDialog = new AddMovieDialog(movie, genres, actors);
+            addMovieDialog.show(getSupportFragmentManager(), "ADD_MOVIE_DIALOG");
         }
     }
 
     @Override
-    public void onDone(Movie movie, List<String> genres, List<String> actors) {
-        moviesViewModel.updateMovie(movie, genres, actors);
-        onMovieSelected(null);
-        //todo Selected = -1
+    public void onDone(Movie movie, List<String> genres, List<String> actors, boolean resultOk) {
+        if (resultOk) {
+            RecyclerView recyclerView = findViewById(R.id.list);
+            if (recyclerView != null) {
+                MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
+                if (adapter != null) {
+                    moviesViewModel.updateMovie(movie, genres, actors);
+                    onMovieSelected(null);
+                    adapter.resetSelectedPosition();
+                }
+            }
+        } else {
+            EditMovieDialog editMovieDialog = new EditMovieDialog(movie, genres, actors);
+            editMovieDialog.show(getSupportFragmentManager(), "EDIT_MOVIE_DIALOG");
+        }
     }
 
     @Override
     public void onCancel() {
-        onMovieSelected(null);
-        //todo Selected = -1
+        RecyclerView recyclerView = findViewById(R.id.list);
+        if (recyclerView != null) {
+            MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
+            if (adapter != null) {
+                onMovieSelected(null);
+                adapter.resetSelectedPosition();
+            }
+        }
     }
 
     @Override
@@ -160,9 +194,11 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         RecyclerView recyclerView = findViewById(R.id.list);
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
-            adapter.sort(checkedSort);
-            this.checkedSort = checkedSort;
-            onMovieSelected(null);
+            if (adapter != null) {
+                adapter.sort(checkedSort);
+                MainActivity.checkedSort = checkedSort;
+                onMovieSelected(null);
+            }
         } else {
             Toast.makeText(this, "Return to list to sort it", Toast.LENGTH_SHORT).show();
         }
