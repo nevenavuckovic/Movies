@@ -9,12 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -32,12 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import rs.ac.ni.pmf.movies.R;
-import rs.ac.ni.pmf.movies.databinding.AddMovieDialogBinding;
 import rs.ac.ni.pmf.movies.databinding.EditMovieDialogBinding;
 import rs.ac.ni.pmf.movies.fragment.MoviesListFragment;
 import rs.ac.ni.pmf.movies.model.Movie;
-import rs.ac.ni.pmf.movies.model.MovieWithActors;
-import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 
 public class EditMovieDialog extends DialogFragment {
 
@@ -126,6 +117,7 @@ public class EditMovieDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        this.setCancelable(false);
         binding = EditMovieDialogBinding.inflate(getLayoutInflater());
         binding.setMovie(movie);
 
@@ -166,13 +158,18 @@ public class EditMovieDialog extends DialogFragment {
                         genres.removeIf(String::isEmpty);
                         movie.setYear(Long.parseLong(binding.editYear.getText().toString()));
                         listener.onDone(movie, genres, actors, true);
-                        MoviesListFragment.done = true;
+                        MoviesListFragment.menu = false;
                     }
                 })
                 .setNeutralButton(R.string.cancel,
-                        (dialogInterface, i) -> listener.onCancel())
+                        (dialogInterface, i) -> {
+                            listener.onCancel();
+                            MoviesListFragment.menu = false;
+                        })
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
         return alertDialog;
     }
+
+
 }

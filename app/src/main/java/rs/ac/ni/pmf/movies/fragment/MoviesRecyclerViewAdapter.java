@@ -29,10 +29,10 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     private List<MovieWithGenres> moviesWithGenres;
     private final List<MovieWithGenres> moviesWithGenresFull;
     private List<MovieWithGenres> filteredMoviesWithGenres;
+    private List<MovieWithGenres> sortedMoviesWithGenres;
     private final MovieSelectedListener movieSelectedListener;
     private final FragmentActivity fragmentActivity;
     private static MovieWithGenres menuSelectedMovie;
-    private static int menuSelectedPosition = RecyclerView.NO_POSITION;
 
     public interface MovieSelectedListener{
         void onMovieSelected(MovieWithGenres movie);
@@ -86,11 +86,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public MovieWithGenres getMenuSelectedMovie(){
         return menuSelectedMovie;
     }
-
-    public boolean menuAndSelected(){
-        return selectedPosition == menuSelectedPosition;
-    }
-
 
     @Override
     public int getItemCount() {
@@ -172,7 +167,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
         @Override
         public void onClick(View view) {
-            notifyItemChanged(selectedPosition);
             selectedPosition = getBindingAdapterPosition();
             notifyItemChanged(selectedPosition);
             movieSelectedListener.onMovieSelected(movieWithGenres);
@@ -185,8 +179,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
         @Override
         public boolean onLongClick(View view) {
-            menuSelectedPosition = getBindingAdapterPosition();
-            menuSelectedMovie = moviesWithGenres.get(menuSelectedPosition);
+            menuSelectedMovie = moviesWithGenres.get(getBindingAdapterPosition());
             return false;
         }
 

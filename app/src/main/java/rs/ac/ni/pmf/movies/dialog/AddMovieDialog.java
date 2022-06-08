@@ -118,6 +118,7 @@ public class AddMovieDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        this.setCancelable(false);
         binding = AddMovieDialogBinding.inflate(getLayoutInflater());
         binding.setMovie(movie);
 

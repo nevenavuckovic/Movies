@@ -23,7 +23,6 @@ import rs.ac.ni.pmf.movies.fragment.MovieDetailsFragment;
 import rs.ac.ni.pmf.movies.fragment.MoviesRecyclerViewAdapter;
 import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.Movie;
-import rs.ac.ni.pmf.movies.model.MovieWithActors;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
@@ -33,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
 
     private MoviesViewModel moviesViewModel;
     private static MovieWithGenres movie = null;
-    private static List<Genre> checkedGenres = new ArrayList<>();
-    private static String checkedSort = "None"; //todo fix, check when on details, edit
+    public static List<Genre> checkedGenres = new ArrayList<>();
+    public static String checkedSort = "None"; //todo fix, check when on details
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

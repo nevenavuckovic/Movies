@@ -18,6 +18,7 @@ import rs.ac.ni.pmf.movies.repository.MoviesRepository;
 public class MoviesViewModel extends AndroidViewModel {
     private final MutableLiveData<MovieWithGenres> selectedMovieWithGenres = new MutableLiveData<>();
     private LiveData<MovieWithActors> selectedMovieWithActors = new MutableLiveData<>();
+    private List<MovieWithActors> movieWithActors;
 
     private final MoviesRepository moviesRepository;
 
@@ -120,6 +121,7 @@ public class MoviesViewModel extends AndroidViewModel {
         }
         return selectedMovieWithActors;
     }
+
 
     public void setSelectedMovie(MovieWithGenres movieWithGenres) {
         selectedMovieWithGenres.setValue(movieWithGenres);

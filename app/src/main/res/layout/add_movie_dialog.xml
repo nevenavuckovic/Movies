@@ -41,8 +41,10 @@
             android:text="@={movie.title}"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_add_name"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_add_name"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <ImageView
             android:id="@+id/movie_add_image"
@@ -87,8 +89,10 @@
             android:text="@={movie.director}"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_add_director"
-            app:layout_constraintTop_toBottomOf="@+id/add_button" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_add_director"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/text_add_actors"
@@ -111,8 +115,10 @@
             android:hint="@string/hint_actors"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_add_director"
-            app:layout_constraintTop_toBottomOf="@+id/edit_add_director" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_add_actors"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/text_add_year"
@@ -138,7 +144,8 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_add_year"
-            app:layout_constraintTop_toBottomOf="@+id/edit_add_actors" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_add_actors"
+            android:importantForAutofill="no"/>
 
         <TextView
             android:id="@+id/text_add_genres"
@@ -160,8 +167,10 @@
             android:hint="@string/hint_genres"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_add_genres"
-            app:layout_constraintTop_toBottomOf="@+id/edit_add_year" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_add_genres"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/text_add_description"
@@ -172,7 +181,6 @@
             android:layout_marginStart="5dp"
             android:text="@string/description_dialog"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_add_genres"
             tools:text="@string/hint" />
@@ -188,8 +196,10 @@
             android:text="@={movie.description}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_add_description"
-            app:layout_constraintTop_toBottomOf="@+id/edit_add_genres" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_add_description"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

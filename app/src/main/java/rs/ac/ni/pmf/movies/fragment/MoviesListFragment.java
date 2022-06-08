@@ -36,7 +36,7 @@ public class MoviesListFragment extends Fragment{
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    public static boolean done = false;
+    public static boolean menu = false;
 
     public MoviesListFragment() {
     }
@@ -96,10 +96,10 @@ public class MoviesListFragment extends Fragment{
         MovieWithGenres movieWithGenres = moviesRecyclerViewAdapter.getMenuSelectedMovie();
 
         if (item.getItemId() == R.id.menu_edit_movie){
-            done = false;
+            menu = true;
             moviesViewModel.getMovie(movieWithGenres.movie.getMovie_id()).observe(this,
                     movieWithActors -> {
-                        if (!done) {
+                        if (menu) {
                             EditMovieDialog editMovieDialog = new EditMovieDialog(movieWithGenres.movie,
                                     Arrays.asList(movieWithGenres.toString().split("\\s*,\\s*")),
                                     Arrays.asList(movieWithActors.toString().split("\\s*,\\s*")));
@@ -111,12 +111,12 @@ public class MoviesListFragment extends Fragment{
         }
         if (item.getItemId() == R.id.menu_delete_movie){
             moviesViewModel.deleteMovie(movieWithGenres.movie.getMovie_id());
-            if (moviesRecyclerViewAdapter.menuAndSelected()) {
-                moviesRecyclerViewAdapter.resetSelectedPosition();
-                movieSelectedListener.onMovieSelected(null);
-            }
+            moviesRecyclerViewAdapter.resetSelectedPosition();
+            movieSelectedListener.onMovieSelected(null);
+
             return true;
         }
         return false;
     }
+
 }
