@@ -20,6 +20,7 @@ import rs.ac.ni.pmf.movies.dialog.EditMovieDialog;
 import rs.ac.ni.pmf.movies.dialog.SelectGenresDialog;
 import rs.ac.ni.pmf.movies.dialog.SortDialog;
 import rs.ac.ni.pmf.movies.fragment.MovieDetailsFragment;
+import rs.ac.ni.pmf.movies.fragment.MoviesListFragment;
 import rs.ac.ni.pmf.movies.fragment.MoviesRecyclerViewAdapter;
 import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.Movie;
@@ -98,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
                             adapter.getFilter().filter(s);
                             onMovieSelected(null);
                         }
-                    } else {
-                        Toast.makeText(MainActivity.this, "Return to list to search it", Toast.LENGTH_SHORT).show();
                     }
 
                     return false;
@@ -133,12 +132,15 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
             if (adapter != null) {
-                adapter.setFilteredMoviesWithGenres(checkedGenres);
                 MainActivity.checkedGenres = checkedGenres;
+                adapter.setMovies();
+                MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
                 onMovieSelected(null);
             }
         } else {
-            Toast.makeText(this, "Return to list to filter it", Toast.LENGTH_LONG).show();
+            MainActivity.checkedGenres = checkedGenres;
+            MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
+            onMovieSelected(null);
         }
     }
 
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
                 if (adapter != null) {
                     moviesViewModel.updateMovie(movie, genres, actors);
                     onMovieSelected(null);
-                    adapter.resetSelectedPosition();
+                    MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
                 }
             }
         } else {
@@ -178,14 +180,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
 
     @Override
     public void onCancel() {
-        RecyclerView recyclerView = findViewById(R.id.list);
-        if (recyclerView != null) {
-            MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
-            if (adapter != null) {
-                onMovieSelected(null);
-                adapter.resetSelectedPosition();
-            }
-        }
+        onMovieSelected(null);
+        MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
     }
 
     @Override
@@ -194,12 +190,15 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
             if (adapter != null) {
-                adapter.sort(checkedSort);
                 MainActivity.checkedSort = checkedSort;
+                adapter.setMovies();
+                MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
                 onMovieSelected(null);
             }
         } else {
-            Toast.makeText(this, "Return to list to sort it", Toast.LENGTH_SHORT).show();
+            MainActivity.checkedSort = checkedSort;
+            MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
+            onMovieSelected(null);
         }
     }
 }

@@ -182,4 +182,8 @@ public class MoviesViewModel extends AndroidViewModel {
     public long getMovieId(String title) {
         return moviesRepository.getMovieId(title);
     }
+
+    public LiveData<List<MovieWithGenres>> getAllMoviesSorted(String s) {
+        return moviesRepository.getAllMoviesSorted(s);
+    }
 }

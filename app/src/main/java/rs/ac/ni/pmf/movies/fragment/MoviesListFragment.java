@@ -31,9 +31,7 @@ public class MoviesListFragment extends Fragment{
     private MoviesRecyclerViewAdapter moviesRecyclerViewAdapter;
     public RecyclerView recyclerView;
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
     public static boolean menu = false;
@@ -106,12 +104,12 @@ public class MoviesListFragment extends Fragment{
                             editMovieDialog.show(getParentFragmentManager(), "EDIT_MOVIE_DIALOG");
                         }
                     });
-            moviesRecyclerViewAdapter.resetSelectedPosition();
+            MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
             return true;
         }
         if (item.getItemId() == R.id.menu_delete_movie){
             moviesViewModel.deleteMovie(movieWithGenres.movie.getMovie_id());
-            moviesRecyclerViewAdapter.resetSelectedPosition();
+            MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
             movieSelectedListener.onMovieSelected(null);
 
             return true;

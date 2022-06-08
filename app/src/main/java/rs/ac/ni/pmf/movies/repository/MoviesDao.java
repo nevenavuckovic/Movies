@@ -62,4 +62,10 @@ public interface MoviesDao {
 
     @Query("SELECT movie_id FROM movies WHERE title LIKE :title")
     long getMovieId(String title);
+
+    @Query("SELECT * FROM movies ORDER BY title ASC")
+    LiveData<List<MovieWithGenres>> getAllMoviesSortedASC();
+
+    @Query("SELECT * FROM movies ORDER BY title DESC")
+    LiveData<List<MovieWithGenres>> getAllMoviesSortedDESC();
 }

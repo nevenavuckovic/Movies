@@ -76,9 +76,8 @@ public class SelectGenresDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        final View layout = getLayoutInflater().inflate(R.layout.select_genres_dialog, null);
         final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        final AlertDialog alertDialog = builder.setView(layout)
+        final AlertDialog alertDialog = builder
                 .setTitle(R.string.select_genres)
                 .setMultiChoiceItems(list.toArray(new String[0]), checkedGenres,
                         (dialogInterface, i, b) -> checkedGenres[i] = b)

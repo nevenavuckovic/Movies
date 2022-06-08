@@ -46,6 +46,8 @@ public class AddMovieDialog extends DialogFragment {
 
     public AddMovieDialog(){
         movie = new Movie("", null, "", 2022, "");
+        genres = new ArrayList<>();
+        actors = new ArrayList<>();
     }
 
     public AddMovieDialog(Movie movie,  List<String> genres, List<String> actors){
