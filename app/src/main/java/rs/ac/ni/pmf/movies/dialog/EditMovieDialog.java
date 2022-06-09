@@ -137,7 +137,6 @@ public class EditMovieDialog extends DialogFragment {
         final AlertDialog alertDialog = builder.setView(binding.getRoot())
                 .setTitle(R.string.edit_movie)
                 .setPositiveButton(R.string.done, (dialogInterface, i) -> {
-
                     actors = Arrays.asList(binding.editActors.getText().toString().split("\\s*,\\s*"));
                     genres = Arrays.asList(binding.editGenres.getText().toString().split("\\s*,\\s*"));
 
