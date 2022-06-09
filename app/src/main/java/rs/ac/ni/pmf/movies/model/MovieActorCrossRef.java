@@ -15,9 +15,7 @@ public class MovieActorCrossRef {
         this.actor_id = actor_id;
     }
 
-    public long getMovie_id() {
-        return movie_id;
-    }
+    public long getMovie_id() { return movie_id; }
 
     public void setMovie_id(long movie_id) {
         this.movie_id = movie_id;

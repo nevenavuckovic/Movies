@@ -6,10 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import java.util.List;
-
 import rs.ac.ni.pmf.movies.model.MovieActorCrossRef;
-
 
 @Dao
 public interface MoviesActorsDao {

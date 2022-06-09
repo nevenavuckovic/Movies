@@ -34,6 +34,14 @@ public class Movie extends BaseObservable implements Parcelable {
         this.description = description;
     }
 
+    public Movie(Movie movie){
+        this.movie_id = movie.getMovie_id();
+        this.title = movie.getTitle();
+        this.image = movie.getImage();
+        this.director = movie.getDirector();
+        this.year = movie.getYear();
+        this.description = movie.getDescription();
+    }
 
     protected Movie(Parcel in) {
         movie_id = in.readLong();

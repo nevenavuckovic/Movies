@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.Embedded;
@@ -62,6 +63,7 @@ public class MovieWithGenres extends BaseObservable implements Parcelable {
         }
     };
 
+    @NonNull
     @Override
     public String toString() {
         List<String> genreNames = new ArrayList<>();
@@ -70,5 +72,4 @@ public class MovieWithGenres extends BaseObservable implements Parcelable {
         }
         return TextUtils.join(", ", genreNames);
     }
-
 }

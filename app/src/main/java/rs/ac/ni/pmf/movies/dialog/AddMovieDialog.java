@@ -31,7 +31,6 @@ import rs.ac.ni.pmf.movies.model.Movie;
 
 public class AddMovieDialog extends DialogFragment {
 
-
     public interface AddMovieDialogListener {
         void onAddMovie(Movie movie, List<String> genres, List<String> actors, boolean resultOk);
     }
@@ -85,7 +84,6 @@ public class AddMovieDialog extends DialogFragment {
         super.onAttach(context);
         listener = (AddMovieDialog.AddMovieDialogListener) context;
 
-
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -101,7 +99,7 @@ public class AddMovieDialog extends DialogFragment {
                             } else if(mimeType.endsWith("jpg") || mimeType.endsWith("jpeg")){
                                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                             } else {
-                                Toast.makeText(requireActivity(), "Supported formats are PNG and JPEG", Toast.LENGTH_LONG).show();
+                                Toast.makeText(requireActivity(), R.string.format, Toast.LENGTH_LONG).show();
                             }
                             byte[] byteArray = stream.toByteArray();
                             movie.setImage(byteArray);
@@ -114,8 +112,6 @@ public class AddMovieDialog extends DialogFragment {
                 }
         );
     }
-
-
 
     @NonNull
     @Override
@@ -152,8 +148,6 @@ public class AddMovieDialog extends DialogFragment {
                             binding.editAddGenres.getText().toString().chars().noneMatch(Character::isLetter) ||
                             movie.getTitle().chars().noneMatch(Character::isLetter) || movie.getTitle().chars().noneMatch(Character::isLetter)
                             || binding.editAddYear.getText().toString().equals("") || movie.getDescription().equals("")){
-                        Toast.makeText(requireActivity(), "All fields must be filled correctly",
-                                Toast.LENGTH_LONG).show();
                         listener.onAddMovie(movie, genres, actors,false);
                     } else {
                         actors.removeIf(String::isEmpty);

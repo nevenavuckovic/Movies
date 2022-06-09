@@ -25,5 +25,4 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/landscape_fragment_separator_guide" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

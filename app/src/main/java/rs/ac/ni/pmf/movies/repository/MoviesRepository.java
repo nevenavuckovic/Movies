@@ -100,12 +100,4 @@ public class MoviesRepository {
     public void deleteMovieActor(long movie_id) {
         moviesDatabase.execute(() -> moviesActorsDao.deleteMovieActor(movie_id));
     }
-
-    public LiveData<List<MovieWithGenres>> getAllMoviesSorted(String s) {
-        if (s.equals("ASC")) {
-            return moviesDatabase.submit(moviesDao::getAllMoviesSortedASC);
-        } else {
-            return moviesDatabase.submit(moviesDao::getAllMoviesSortedDESC);
-        }
-    }
 }

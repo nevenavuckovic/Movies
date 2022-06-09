@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.Embedded;
@@ -34,7 +35,6 @@ public class MovieWithActors extends BaseObservable implements Parcelable {
         this.actors = actors;
     }
 
-
     protected MovieWithActors(Parcel in) {
         movie = in.readParcelable(Movie.class.getClassLoader());
         actors = in.createTypedArrayList(Actor.CREATOR);
@@ -63,6 +63,7 @@ public class MovieWithActors extends BaseObservable implements Parcelable {
         }
     };
 
+    @NonNull
     @Override
     public String toString() {
         List<String> actorNames = new ArrayList<>();

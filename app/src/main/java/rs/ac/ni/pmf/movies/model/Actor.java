@@ -22,7 +22,6 @@ public class Actor extends BaseObservable implements Parcelable {
         this.actor = actor;
     }
 
-
     protected Actor(Parcel in) {
         actor_id = in.readLong();
         actor = in.readString();

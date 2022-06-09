@@ -11,13 +11,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         tools:context=".dialog.AddMovieDialog">
-
 
         <TextView
             android:id="@+id/text_add_name"
@@ -200,7 +197,6 @@
             app:layout_constraintTop_toBottomOf="@+id/text_add_description"
             android:importantForAutofill="no"
             android:inputType="text"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -34,7 +34,6 @@ public class EditMovieDialog extends DialogFragment {
 
     public interface EditMovieDialogListener {
         void onDone(Movie movie, List<String> genres, List<String> actors, boolean resultOk);
-        void onCancel();
     }
 
     private EditMovieDialog.EditMovieDialogListener listener;
@@ -48,14 +47,12 @@ public class EditMovieDialog extends DialogFragment {
     public EditMovieDialog(){
     }
 
-
     public EditMovieDialog(Movie movie, List<String> genres, List<String> actors){
-        this.movie = movie;
+        this.movie = new Movie(movie);
         this.genres = genres;
         this.actors = actors;
         this.img = movie.getImage();
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -80,7 +77,6 @@ public class EditMovieDialog extends DialogFragment {
         }
     }
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -101,7 +97,7 @@ public class EditMovieDialog extends DialogFragment {
                             } else if(mimeType.endsWith("jpg") || mimeType.endsWith("jpeg")){
                                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                             } else {
-                                Toast.makeText(requireActivity(), "Supported formats are PNG and JPEG", Toast.LENGTH_LONG).show();
+                                Toast.makeText(requireActivity(), R.string.format, Toast.LENGTH_LONG).show();
                             }
                             byte[] byteArray = stream.toByteArray();
                             movie.setImage(byteArray);
@@ -128,8 +124,7 @@ public class EditMovieDialog extends DialogFragment {
         });
 
         if (movie.getImage() != null) {
-            Bitmap bmp = BitmapFactory.decodeByteArray(movie.getImage(), 0,
-                    movie.getImage().length);
+            Bitmap bmp = BitmapFactory.decodeByteArray(movie.getImage(), 0, movie.getImage().length);
             binding.movieImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200, 250, false));
         }
 
@@ -137,7 +132,6 @@ public class EditMovieDialog extends DialogFragment {
             binding.editGenres.setText(TextUtils.join(", ", genres));
         if (actors != null)
             binding.editActors.setText(TextUtils.join(", ", actors));
-
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         final AlertDialog alertDialog = builder.setView(binding.getRoot())
@@ -151,7 +145,6 @@ public class EditMovieDialog extends DialogFragment {
                             binding.editGenres.getText().toString().chars().noneMatch(Character::isLetter) ||
                             movie.getDirector().chars().noneMatch(Character::isLetter) ||
                             binding.editYear.getText().toString().equals("") || movie.getDescription().equals("") ){
-                        Toast.makeText(requireActivity(), "All fields must be filled correctly", Toast.LENGTH_LONG).show();
                         listener.onDone(movie, genres, actors, false);
                     } else {
                         actors.removeIf(String::isEmpty);
@@ -163,13 +156,11 @@ public class EditMovieDialog extends DialogFragment {
                 })
                 .setNeutralButton(R.string.cancel,
                         (dialogInterface, i) -> {
-                            listener.onCancel();
+
                             MoviesListFragment.menu = false;
                         })
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
         return alertDialog;
     }
-
-
 }

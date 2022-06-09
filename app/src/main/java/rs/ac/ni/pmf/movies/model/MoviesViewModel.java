@@ -18,16 +18,14 @@ import rs.ac.ni.pmf.movies.repository.MoviesRepository;
 public class MoviesViewModel extends AndroidViewModel {
     private final MutableLiveData<MovieWithGenres> selectedMovieWithGenres = new MutableLiveData<>();
     private LiveData<MovieWithActors> selectedMovieWithActors = new MutableLiveData<>();
-    private List<MovieWithActors> movieWithActors;
 
     private final MoviesRepository moviesRepository;
-
 
     public MoviesViewModel(@NonNull Application application) {
         super(application);
         moviesRepository = new MoviesRepository(application);
 
-
+        //this is just to have some data when we install app
         if (moviesRepository.getMovieCount() == 0) {
             long movie1 = moviesRepository.addMovie(new Movie
                     ("The Lord of the Rings: The Return of the King", getImageRes(R.drawable.tlotr_the_return_of_the_king),
@@ -106,7 +104,6 @@ public class MoviesViewModel extends AndroidViewModel {
         return stream.toByteArray();
     }
 
-
     public LiveData<List<MovieWithGenres>> getMovies() {
         return  moviesRepository.getMoviesWithGenres();
     }
@@ -115,16 +112,15 @@ public class MoviesViewModel extends AndroidViewModel {
         return selectedMovieWithGenres;
     }
 
+    public void setSelectedMovie(MovieWithGenres movieWithGenres) {
+        selectedMovieWithGenres.setValue(movieWithGenres);
+    }
+
     public LiveData<MovieWithActors> getSelectedMovieWithActors() {
         if (selectedMovieWithGenres.getValue() != null) {
             selectedMovieWithActors = moviesRepository.getMoviesWithActors(selectedMovieWithGenres.getValue().movie.getMovie_id());
         }
         return selectedMovieWithActors;
-    }
-
-
-    public void setSelectedMovie(MovieWithGenres movieWithGenres) {
-        selectedMovieWithGenres.setValue(movieWithGenres);
     }
 
     public void deleteMovie(long id) {
@@ -137,6 +133,10 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public LiveData<MovieWithActors> getMovie(long id) {
         return moviesRepository.getMovieWithActors(id);
+    }
+
+    public long getMovieId(String title) {
+        return moviesRepository.getMovieId(title);
     }
 
     public void updateMovie(Movie movie, List<String> genres, List<String> actors){
@@ -160,7 +160,6 @@ public class MoviesViewModel extends AndroidViewModel {
         }
     }
 
-
     public void addMovie(Movie movie, List<String> genres, List<String> actors) {
         long movie_id = moviesRepository.addMovie(movie);
         for (String s: genres){
@@ -177,13 +176,5 @@ public class MoviesViewModel extends AndroidViewModel {
             }
             moviesRepository.addMovieActor(new MovieActorCrossRef(movie_id, actor_id));
         }
-    }
-
-    public long getMovieId(String title) {
-        return moviesRepository.getMovieId(title);
-    }
-
-    public LiveData<List<MovieWithGenres>> getAllMoviesSorted(String s) {
-        return moviesRepository.getAllMoviesSorted(s);
     }
 }

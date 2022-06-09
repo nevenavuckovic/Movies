@@ -3,7 +3,6 @@ package rs.ac.ni.pmf.movies.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,13 +26,14 @@ public class SelectGenresDialog extends DialogFragment {
     private ArrayList<String> list;
     private boolean[] checkedGenres;
 
+    public SelectGenresDialog(){}
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("GENRES", listOfGenres);
         outState.putStringArrayList("GENRES_NAMES", list);
         outState.putBooleanArray("CHECKED", checkedGenres);
-
     }
 
     @Override
@@ -43,11 +43,7 @@ public class SelectGenresDialog extends DialogFragment {
             listOfGenres = savedInstanceState.getParcelableArrayList("GENRES");
             list = savedInstanceState.getStringArrayList("GENRES_NAMES");
             checkedGenres = savedInstanceState.getBooleanArray("CHECKED");
-
         }
-    }
-
-    public SelectGenresDialog(){
     }
 
     public SelectGenresDialog(List<Genre> listOfGenres, List<Genre> checked){
@@ -88,10 +84,9 @@ public class SelectGenresDialog extends DialogFragment {
                                 genres.add(listOfGenres.get(k));
                             }
                         }
-                            listener.onSearch(genres);
-                    })
-                .setNeutralButton(R.string.cancel,
-                        (dialogInterface, i) -> {})
+                        listener.onSearch(genres);
+                })
+                .setNeutralButton(R.string.cancel, (dialogInterface, i) -> {})
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
         return alertDialog;

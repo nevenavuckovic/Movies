@@ -1,6 +1,5 @@
 package rs.ac.ni.pmf.movies.model;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -22,7 +21,6 @@ public class Genre extends BaseObservable implements Parcelable {
     public Genre(String genre) {
         this.genre = genre;
     }
-
 
     protected Genre(Parcel in) {
         genre_id = in.readLong();
@@ -72,7 +70,10 @@ public class Genre extends BaseObservable implements Parcelable {
 
     @Override
     public boolean equals(Object o){
-        Genre g = (Genre) o;
-        return getGenre().equals(g.getGenre()) && getGenre_id() == g.getGenre_id();
+        if  (o instanceof Genre) {
+            Genre g = (Genre) o;
+            return getGenre().equals(g.getGenre()) && getGenre_id() == g.getGenre_id();
+        }
+        return false;
     }
 }

@@ -2,7 +2,6 @@ package rs.ac.ni.pmf.movies.fragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ContextMenu;
@@ -17,12 +16,9 @@ import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.databinding.FragmentMovieBinding;
 import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
-import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>
@@ -31,7 +27,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public static int selectedPosition = RecyclerView.NO_POSITION;
     private List<MovieWithGenres> moviesWithGenres;
     private List<MovieWithGenres> moviesWithGenresSortedAndFiltered;
-    private List<MovieWithGenres> moviesWithGenresFull;
+    private final List<MovieWithGenres> moviesWithGenresFull;
     private final MovieSelectedListener movieSelectedListener;
     private final FragmentActivity fragmentActivity;
     private static MovieWithGenres menuSelectedMovie;
@@ -40,8 +36,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         void onMovieSelected(MovieWithGenres movie);
     }
 
-
-    public MoviesRecyclerViewAdapter(List<MovieWithGenres> movies ,
+    public MoviesRecyclerViewAdapter(List<MovieWithGenres> movies,
                                      MovieSelectedListener movieSelectedListener,
                                      FragmentActivity fragmentActivity) {
         this.fragmentActivity = fragmentActivity;
@@ -55,7 +50,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public void setMovies() {
         List<Genre> checkedGenres = MainActivity.checkedGenres;
         moviesWithGenres = new ArrayList<>(moviesWithGenresFull);
-        if (MainActivity.checkedSort.equals("None")){
+        if (MainActivity.checkedSort.equals("-")){
             if (checkedGenres.size() != 0){
                 List<MovieWithGenres> movies = new ArrayList<>();
                 for (MovieWithGenres movie: moviesWithGenres){
@@ -65,7 +60,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
                 }
                 moviesWithGenres = movies;
             }
-        } else if (MainActivity.checkedSort.equals("Ascending")) {
+        } else if (MainActivity.checkedSort.equals("A-Z")) {
             moviesWithGenres.sort((movie1, movie2) ->
                     movie1.movie.getTitle().compareToIgnoreCase(movie2.movie.getTitle()));
             if (checkedGenres.size() != 0){
@@ -93,29 +88,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         }
         moviesWithGenresSortedAndFiltered = new ArrayList<>(moviesWithGenres);
         notifyDataSetChanged();
-
-    }
-
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(FragmentMovieBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.setSelection(position);
-    }
-
-
-    public MovieWithGenres getMenuSelectedMovie(){
-        return menuSelectedMovie;
-    }
-
-    @Override
-    public int getItemCount() {
-        return moviesWithGenres.size();
     }
 
     @Override
@@ -152,8 +124,28 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         }
     };
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener,
-            View.OnLongClickListener{
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(FragmentMovieBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        holder.setSelection(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return moviesWithGenres.size();
+    }
+
+    public MovieWithGenres getMenuSelectedMovie(){
+        return menuSelectedMovie;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnCreateContextMenuListener, View.OnLongClickListener{
         private MovieWithGenres movieWithGenres;
         private final FragmentMovieBinding binding;
 
@@ -173,7 +165,9 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
         @Override
         public void onClick(View view) {
+            notifyItemChanged(selectedPosition);
             selectedPosition = getBindingAdapterPosition();
+            notifyItemChanged(selectedPosition);
             movieSelectedListener.onMovieSelected(movieWithGenres);
         }
 
@@ -187,7 +181,5 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
             menuSelectedMovie = moviesWithGenres.get(getBindingAdapterPosition());
             return false;
         }
-
-
     }
 }

@@ -3,7 +3,6 @@ package rs.ac.ni.pmf.movies.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +21,17 @@ public class SortDialog extends DialogFragment {
     }
 
     private SortDialog.SortDialogListener listener;
-    private List<String> sorts;
+    private final List<String> sorts;
     private int checkedSort;
+
+    public SortDialog(){
+        sorts = Arrays.asList("-", "A-Z", "Z-A");
+    }
+
+    public SortDialog(String checked){
+        sorts = Arrays.asList("-", "A-Z", "Z-A");
+        checkedSort = sorts.indexOf(checked);
+    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -38,15 +46,6 @@ public class SortDialog extends DialogFragment {
         if (savedInstanceState != null){
             checkedSort = savedInstanceState.getInt("CHECKED_SORT");
         }
-    }
-
-    public SortDialog(){
-        sorts = Arrays.asList("None", "Ascending", "Descending");
-    }
-
-    public SortDialog(String checked){
-        sorts = Arrays.asList("None", "Ascending", "Descending");
-        checkedSort = sorts.indexOf(checked);
     }
 
     @Override

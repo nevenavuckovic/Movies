@@ -2,17 +2,14 @@ package rs.ac.ni.pmf.movies.repository;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import rs.ac.ni.pmf.movies.model.Actor;
 import rs.ac.ni.pmf.movies.model.Genre;
@@ -35,7 +32,6 @@ public abstract class MoviesDatabase extends RoomDatabase {
                             .databaseBuilder(context.getApplicationContext(), MoviesDatabase.class, "movies_database")
                             .setQueryExecutor(databaseExecutor)
                             .build();
-
                 }
             }
         }
@@ -53,12 +49,11 @@ public abstract class MoviesDatabase extends RoomDatabase {
     }
 
     public <T> T submit(Callable<T> task){
-        T t = null;
         try {
-            t = databaseExecutor.submit(task).get();
+            return databaseExecutor.submit(task).get();
         } catch (ExecutionException | InterruptedException e){
             e.fillInStackTrace();
         }
-        return t;
+        return null;
     }
 }

@@ -14,6 +14,5 @@ public class ActorWithMovies {
             entityColumn = "movie_id",
             associateBy = @Junction(MovieActorCrossRef.class)
     )
-
     public List<Movie> movies;
 }

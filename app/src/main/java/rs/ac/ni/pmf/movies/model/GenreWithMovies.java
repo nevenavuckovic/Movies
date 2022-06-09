@@ -14,6 +14,5 @@ public class GenreWithMovies {
             entityColumn = "movie_id",
             associateBy = @Junction(MovieGenreCrossRef.class)
     )
-
     public List<Movie> movies;
 }

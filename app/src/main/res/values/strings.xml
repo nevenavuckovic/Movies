@@ -29,6 +29,10 @@
     <string name="description_dialog">Description: </string>
     <string name="sort">Sort</string>
     <string name="button">Change picture</string>
-
+    <string name="format">Supported formats are PNG and JPEG</string>
+    <string name="fields">All fields must be filled correctly</string>
+    <string name="exist">Movie with this title already exist</string>
+    <string name="added">You successfully added a new movie</string>
+    <string name="edited">You successfully edited the movie</string>
 
 </resources>

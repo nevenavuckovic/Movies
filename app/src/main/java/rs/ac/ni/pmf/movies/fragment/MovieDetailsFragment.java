@@ -15,9 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.ByteArrayOutputStream;
-
-import rs.ac.ni.pmf.movies.R;
 import rs.ac.ni.pmf.movies.databinding.FragmentMovieDetailsBinding;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
@@ -61,8 +58,6 @@ public class MovieDetailsFragment extends Fragment {
                 moviesViewModel.getSelectedMovieWithActors().observe(fragmentActivity,
                         movie -> binding.setMovieWithActors(movie));
             }
-
         });
-
     }
 }

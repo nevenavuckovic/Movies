@@ -10,6 +10,7 @@ import rs.ac.ni.pmf.movies.model.MovieGenreCrossRef;
 
 @Dao
 public interface MoviesGenresDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovieGenreCrossRef(MovieGenreCrossRef movieGenreCrossRef);
 

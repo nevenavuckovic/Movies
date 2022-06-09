@@ -20,7 +20,6 @@ import rs.ac.ni.pmf.movies.dialog.EditMovieDialog;
 import rs.ac.ni.pmf.movies.dialog.SelectGenresDialog;
 import rs.ac.ni.pmf.movies.dialog.SortDialog;
 import rs.ac.ni.pmf.movies.fragment.MovieDetailsFragment;
-import rs.ac.ni.pmf.movies.fragment.MoviesListFragment;
 import rs.ac.ni.pmf.movies.fragment.MoviesRecyclerViewAdapter;
 import rs.ac.ni.pmf.movies.model.Genre;
 import rs.ac.ni.pmf.movies.model.Movie;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     private MoviesViewModel moviesViewModel;
     private static MovieWithGenres movie = null;
     public static List<Genre> checkedGenres = new ArrayList<>();
-    public static String checkedSort = "None"; //todo fix, check when on details
+    public static String checkedSort = "-";
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -49,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
         moviesViewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        moviesViewModel.setSelectedMovie(movie);
+    }
 
     @Override
     public void onMovieSelected(MovieWithGenres movie) {
@@ -64,21 +68,13 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        moviesViewModel.setSelectedMovie(movie);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.movies_main_menu, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (item.getItemId() == R.id.menu_search){
             SearchView searchView = (SearchView) item.getActionView();
             searchView.setMaxWidth(Integer.MAX_VALUE);
@@ -88,10 +84,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
                 public boolean onQueryTextSubmit(String s) {
                     return false;
                 }
-
                 @Override
                 public boolean onQueryTextChange(String s) {
-
                     RecyclerView recyclerView = findViewById(R.id.list);
                     if (recyclerView != null) {
                         MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
@@ -100,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
                             onMovieSelected(null);
                         }
                     }
-
                     return false;
                 }
             });
@@ -128,19 +121,15 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
 
     @Override
     public void onSearch(List<Genre> checkedGenres) {
+        MainActivity.checkedGenres = checkedGenres;
+        MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
+        onMovieSelected(null);
         RecyclerView recyclerView = findViewById(R.id.list);
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
             if (adapter != null) {
-                MainActivity.checkedGenres = checkedGenres;
                 adapter.setMovies();
-                MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
-                onMovieSelected(null);
             }
-        } else {
-            MainActivity.checkedGenres = checkedGenres;
-            MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
-            onMovieSelected(null);
         }
     }
 
@@ -148,13 +137,15 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
     public void onAddMovie(Movie movie, List<String> genres, List<String> actors, boolean resultOk) {
         if (resultOk) {
             if (moviesViewModel.getMovieId(movie.getTitle()) != 0L) {
-                Toast.makeText(this, "Movie with this title already exist!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.exist, Toast.LENGTH_LONG).show();
                 AddMovieDialog addMovieDialog = new AddMovieDialog(movie, genres, actors);
                 addMovieDialog.show(getSupportFragmentManager(), "ADD_MOVIE_DIALOG");
             } else {
                 moviesViewModel.addMovie(movie, genres, actors);
+                Toast.makeText(this, R.string.added, Toast.LENGTH_LONG).show();
             }
         } else {
+            Toast.makeText(this, R.string.fields, Toast.LENGTH_LONG).show();
             AddMovieDialog addMovieDialog = new AddMovieDialog(movie, genres, actors);
             addMovieDialog.show(getSupportFragmentManager(), "ADD_MOVIE_DIALOG");
         }
@@ -170,35 +161,27 @@ public class MainActivity extends AppCompatActivity implements MoviesRecyclerVie
                     moviesViewModel.updateMovie(movie, genres, actors);
                     onMovieSelected(null);
                     MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
+                    Toast.makeText(this, R.string.edited, Toast.LENGTH_LONG).show();
                 }
             }
         } else {
+            Toast.makeText(this, R.string.fields, Toast.LENGTH_LONG).show();
             EditMovieDialog editMovieDialog = new EditMovieDialog(movie, genres, actors);
             editMovieDialog.show(getSupportFragmentManager(), "EDIT_MOVIE_DIALOG");
         }
     }
 
     @Override
-    public void onCancel() {
-        onMovieSelected(null);
-        MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
-    }
-
-    @Override
     public void onSort(String checkedSort) {
+        MainActivity.checkedSort = checkedSort;
+        MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
+        onMovieSelected(null);
         RecyclerView recyclerView = findViewById(R.id.list);
         if (recyclerView != null) {
             MoviesRecyclerViewAdapter adapter = (MoviesRecyclerViewAdapter) recyclerView.getAdapter();
             if (adapter != null) {
-                MainActivity.checkedSort = checkedSort;
                 adapter.setMovies();
-                MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
-                onMovieSelected(null);
             }
-        } else {
-            MainActivity.checkedSort = checkedSort;
-            MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
-            onMovieSelected(null);
         }
     }
 }

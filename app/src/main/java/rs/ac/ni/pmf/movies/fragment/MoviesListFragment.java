@@ -23,7 +23,6 @@ import rs.ac.ni.pmf.movies.dialog.EditMovieDialog;
 import rs.ac.ni.pmf.movies.model.MovieWithGenres;
 import rs.ac.ni.pmf.movies.model.MoviesViewModel;
 
-
 public class MoviesListFragment extends Fragment{
 
     private MoviesViewModel moviesViewModel;
@@ -36,18 +35,14 @@ public class MoviesListFragment extends Fragment{
 
     public static boolean menu = false;
 
-    public MoviesListFragment() {
-    }
-
+    public MoviesListFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
         moviesViewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
     }
 
@@ -56,7 +51,6 @@ public class MoviesListFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies_list, container, false);
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -65,13 +59,14 @@ public class MoviesListFragment extends Fragment{
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
             this.recyclerView = recyclerView;
             registerForContextMenu(recyclerView);
             moviesViewModel.getMovies().observe(requireActivity(),
                     movies -> {
-                        moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(movies, movieSelectedListener, requireActivity());
+                        moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(movies,
+                                movieSelectedListener, requireActivity());
                         recyclerView.setAdapter(moviesRecyclerViewAdapter);
-
                     });
         }
         return view;
@@ -86,7 +81,6 @@ public class MoviesListFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -111,10 +105,8 @@ public class MoviesListFragment extends Fragment{
             moviesViewModel.deleteMovie(movieWithGenres.movie.getMovie_id());
             MoviesRecyclerViewAdapter.selectedPosition = RecyclerView.NO_POSITION;
             movieSelectedListener.onMovieSelected(null);
-
             return true;
         }
         return false;
     }
-
 }

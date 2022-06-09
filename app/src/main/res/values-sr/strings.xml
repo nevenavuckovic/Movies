@@ -30,5 +30,10 @@
     <string name="description_dialog">Опис: </string>
     <string name="sort">Сортирај</string>
     <string name="button">Промени слику</string>
+    <string name="format">Подржани формати су PNG и JPEG</string>
+    <string name="fields">Сва поља морају бити исправно попуњена</string>
+    <string name="exist">Филм са овим насловом већ постоји</string>
+    <string name="added">Успешно сте додали нови филм</string>
+    <string name="edited">Успешно сте изменили филм</string>
 
 </resources>
