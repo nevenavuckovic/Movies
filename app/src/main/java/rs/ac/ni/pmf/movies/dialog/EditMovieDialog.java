@@ -155,10 +155,7 @@ public class EditMovieDialog extends DialogFragment {
                     }
                 })
                 .setNeutralButton(R.string.cancel,
-                        (dialogInterface, i) -> {
-
-                            MoviesListFragment.menu = false;
-                        })
+                        (dialogInterface, i) -> MoviesListFragment.menu = false)
                 .create();
         alertDialog.setCanceledOnTouchOutside(false);
         return alertDialog;
